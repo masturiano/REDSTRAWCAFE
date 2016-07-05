@@ -385,9 +385,22 @@ class Get_system extends CI_Model {
         echo $this->db->insert("tbl_items", $data);
     }
     
-    # EDIT USER ID    
+    # EDIT ITEM ID    
     function edit_item_id($data,$item_id){
-        $this->db->update("tbl_item", $data, "user_id = {$item_id}");
+        $this->db->update("tbl_items", $data, "item_id = {$item_id}");
+    }
+    
+    # DELETE ITEM ID
+    function delete_item_id($post_id)
+    {
+        $query_delete_item_id = "
+            delete 
+            from 
+                tbl_items
+            where 
+                item_id = {$post_id}
+        ";
+        $this->db->query($query_delete_item_id);
     }
     
     # GET ITEM DETAILS
