@@ -321,5 +321,101 @@ class Get_system extends CI_Model {
         $query = $this->db->query($query_get_oracle_data);
     } 
     
+    #GET ITEM MAINTENANCE DETAILS
+    function get_item_maintenance()
+    {
+        $query_get_item_details = "
+            select 
+                a.item_id,
+                a.group_code,
+                b.group_name,
+                a.description,
+                a.packaging,
+                a.unit_price,
+                a.rel_price,
+                a.fran_price,
+                a.no_of_items,
+                a.lower_limit,
+                a.date_enter,
+                a.date_update
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+        ";
+        $query = $this->db->query($query_get_item_details);
+        return $query->result();
+    }
+    
+    # GET ITEM GROUP
+    function get_item_group()
+    {
+        $query_get_item_group = "
+            select 
+                group_code,
+                group_name 
+            from 
+                tbl_item_group
+        ";
+        $query = $this->db->query($query_get_item_group);
+        return $query->result();
+    }
+    
+    # EDIT ITEM ID GET ITEM GROUP NAME SELECTED
+    function get_item_group_selected($item_id)
+    {
+        $query_get_item_group = "
+            select 
+                a.group_code,
+                b.group_name 
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+            where
+                a.item_id = {$item_id}
+        ";
+        return $query = $this->db->query($query_get_item_group);
+    }
+    
+    # ADD NEW ITEM
+    function add_new_item($data){
+        echo $this->db->insert("tbl_items", $data);
+    }
+    
+    # EDIT USER ID    
+    function edit_item_id($data,$item_id){
+        $this->db->update("tbl_item", $data, "user_id = {$item_id}");
+    }
+    
+    # GET ITEM DETAILS
+    function get_item_details($item_id)
+    {
+        $query_item_detail = "
+            select 
+                a.item_id,
+                a.group_code,
+                b.group_name,
+                a.description,
+                a.packaging,
+                a.unit_price,
+                a.rel_price,
+                a.fran_price,
+                a.no_of_items,
+                a.lower_limit,
+                a.date_enter,
+                a.date_update
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+            where
+                a.item_id = {$item_id} 
+        ";
+        return $query = $this->db->query($query_item_detail);
+    }
     
 }

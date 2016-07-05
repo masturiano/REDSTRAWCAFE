@@ -189,11 +189,12 @@ $session_user_level = $this->session->userdata('userLevel');
                     # 1 = MIS
                     if($session_group_code == 1){    
                     ?>
-                    <li><a href="<? echo site_url('systema/user_maintenance'); ?>" class="homeIcon" title="Home"><span>User Maintenance</span></a></li>
+                    <li><a href="<? echo site_url('systema/user_maintenance'); ?>" class="homeIcon" title="User Maintenance"><span>User Maintenance</span></a></li>
+                    <li><a href="<? echo site_url('systema/item_maintenance'); ?>" class="homeIcon" title="Item Maintenance"><span>Item Maintenance</span></a></li>
                     <?php
                     }
                     ?>
-                    <li><a href="<? echo site_url('systema/change_password'); ?>" class="homeIcon" title="Home"><span>Change Password</span></a></li>
+                    <li><a href="<? echo site_url('systema/change_password'); ?>" class="homeIcon" title="Change Password"><span>Change Password</span></a></li>
                 </ul>
             </div>
         </li>
