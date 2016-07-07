@@ -191,6 +191,7 @@ $session_user_level = $this->session->userdata('userLevel');
                     ?>
                     <li><a href="<? echo site_url('systema/user_maintenance'); ?>" class="homeIcon" title="User Maintenance"><span>User Maintenance</span></a></li>
                     <li><a href="<? echo site_url('systema/item_maintenance'); ?>" class="homeIcon" title="Item Maintenance"><span>Item Maintenance</span></a></li>
+                    <li><a href="<? echo site_url('systema/branch_maintenance'); ?>" class="homeIcon" title="Branch Maintenance"><span>Branch Maintenance</span></a></li>
                     <?php
                     }
                     ?>

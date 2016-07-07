@@ -431,4 +431,32 @@ class Get_system extends CI_Model {
         return $query = $this->db->query($query_item_detail);
     }
     
+    #GET BRANCH MAINTENANCE DETAILS
+    function get_branch_maintenance()
+    {
+        $query_get_branch_details = "
+            select 
+                branch_id,
+                branch_no,
+                branch_name,
+                address,
+                owner,
+                mobile_no,
+                tel_no,
+                date_enter,
+                date_update
+            from 
+                tbl_branch
+            order by 
+                branch_name
+        ";
+        $query = $this->db->query($query_get_branch_details);
+        return $query->result();
+    }
+    
+    # ADD NEW BRANCH
+    function add_new_branch($data){
+        echo $this->db->insert("tbl_branch", $data);
+    }
+    
 }
