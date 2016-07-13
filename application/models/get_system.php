@@ -459,4 +459,46 @@ class Get_system extends CI_Model {
         echo $this->db->insert("tbl_branch", $data);
     }
     
+    # EDIT BRANCH ID    
+    function edit_branch_id($data,$branch_id){
+        $this->db->update("tbl_branch", $data, "branch_id = {$branch_id}");
+    }
+    
+    # DELETE BRANCH ID
+    function delete_branch_id($post_id)
+    {
+        $query_delete_item_id = "
+            delete 
+            from 
+                tbl_items
+            where 
+                item_id = {$post_id}
+        ";
+        $this->db->query($query_delete_item_id);
+    }
+    
+    # GET BRANCH DETAILS
+    function get_branch_details($branch_id)
+    {
+        $query_branch_detail = "
+            select 
+                branch_id,
+                branch_no,
+                branch_name,
+                address,
+                owner,
+                mobile_no,
+                tel_no,
+                date_enter,
+                date_update
+            from 
+                tbl_branch
+            where
+                branch_id = {$branch_id} 
+            order by 
+                branch_name
+        ";
+        return $query = $this->db->query($query_branch_detail);
+    }
+    
 }

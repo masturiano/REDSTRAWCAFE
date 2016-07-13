@@ -744,6 +744,14 @@ class Systema extends CI_Controller {
         <form data-toggle="validator" role="form" id="add_form" method="POST">
             <table id="table_add" border="0" class="table table-condensed table-striped">
                 <tr>
+                    <td class="table_label"><b>Branch id</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <?php echo $row->branch_id; ?>
+                        <input type="hidden" class="form-control" name="txt_branch_id" id="txt_branch_id" value="<?php echo $row->branch_id; ?>"> 
+                    </td>
+                </tr>
+                <tr>
                     <td class="table_label"><b>Branch No.</b></td>
                     <td class="table_colon"><b>:</b></td>
                     <td class="table_data">
@@ -821,5 +829,157 @@ class Systema extends CI_Controller {
         );
         $this->get_system->add_new_branch($new_branch);
         echo "New branch has been added";
+    }
+    
+    public function edit_branch(){  
+        # MODEL
+        $this->load->model('get_system'); 
+        $result_branch_details = $this->get_system->get_branch_details($this->input->post('post_id'));
+         
+        if ($result_branch_details->num_rows() > 0){
+           $row = $result_branch_details->row();
+        }
+        else{
+           $row = "0"; 
+        }
+        ?>
+        
+        <!-- Jquery UI -->
+        <link href="<? echo base_url('includes/jquery/development-bundle/themes/base/jquery.ui.all.css'); ?>" rel="stylesheet"> 
+        <!-- Jquery Minified Javascript -->
+        <script src="<? echo base_url('includes/jquery/js/jquery-ui-1.8.23.custom.min.js'); ?>"></script>
+        <!-- My Javascript -->
+        <script src="<? echo base_url('includes/my_javascript.js'); ?>"></script>
+        
+        <script type="text/javascript">
+            // ALLOW NUMERIC ONLY ON TEXTFIELD
+            $(function(){
+                $("#txt_unit_price,#txt_rel_price,#txt_fran_price").keydown(function (e) {
+                    // Allow: backspace, delete, tab, escape, enter and .
+                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                         // Allow: Ctrl+A, Command+A
+                        (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+                         // Allow: home, end, left, right, down, up
+                        (e.keyCode >= 35 && e.keyCode <= 40)) {
+                             // let it happen, don't do anything
+                             return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
+                // WITHOUT DOT
+                $("#txt_no_item,#txt_lower_limit").keydown(function (e) {
+                    // Allow: backspace, delete, tab, escape, enter and .
+                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                         // Allow: Ctrl+A, Command+A
+                        (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+                         // Allow: home, end, left, right, down, up
+                        (e.keyCode >= 35 && e.keyCode <= 40)) {
+                             // let it happen, don't do anything
+                             return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+        
+        <form id="edit_form" method="POST">
+            <table id="table_edit" border="0" class="table table-condensed table-striped">
+                <tr>
+                    <td class="table_label"><b>Branch id</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <?php echo $row->branch_id; ?>
+                        <input type="hidden" class="form-control" name="txt_branch_id" id="txt_branch_id" value="<?php echo $row->branch_id; ?>"> 
+                    </td>
+                </tr> 
+                <tr>
+                    <td class="table_label"><b>Branch No.</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_branch_no" id="txt_branch_no" placeholder="<?php echo $row->branch_no; ?>" value="<?php echo $row->branch_no; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_label"><b>Branch Name.</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_branch_name" id="txt_branch_name" placeholder="<?php echo $row->branch_name; ?>" value="<?php echo $row->branch_name; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_label"><b>Address</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_address" id="txt_address" placeholder="<?php echo $row->address; ?>" value="<?php echo $row->address; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_label"><b>Owner</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_owner" id="txt_owner" placeholder="<?php echo $row->owner; ?>" value="<?php echo $row->owner; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_label"><b>Mobile No.</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_mobile_no" id="txt_mobile_no" placeholder="<?php echo $row->mobile_no; ?>" value="<?php echo $row->mobile_no; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_label"><b>Tel No.</b></td>
+                    <td class="table_colon"><b>:</b></td>
+                    <td class="table_data">
+                        <input type="text" class="form-control" name="txt_tel_no" id="txt_tel_no" placeholder="<?php echo $row->tel_no; ?>" value="<?php echo $row->tel_no; ?>" style="height:30px; width: 400px;">  
+                    </td>
+                </tr>
+            </table>    
+        </form>
+        <?php
+    }
+    
+    public function editing_branch(){  
+        # MODEL
+        $this->load->model('get_system');
+
+        # GET CURRENT DATE
+        $result_current_date_time = $this->get_system->get_server_current_date_time();
+        if ($result_current_date_time->num_rows() > 0){
+           $row = $result_current_date_time->row();
+        }
+        else{
+           $row = "0"; 
+        } 
+        
+        $edit_branch = array(
+            "branch_no" => $this->input->post('txt_branch_no'),
+            "branch_name" => $this->input->post('txt_branch_name'), 
+            "address" => $this->input->post('txt_address'),
+            "owner" => $this->input->post('txt_owner'),
+            "mobile_no" => $this->input->post('txt_mobile_no'),
+            "tel_no" => $this->input->post('txt_tel_no'),
+            "date_update" => $row->current_date_time
+        );
+        $this->get_system->edit_item_id($edit_branch,$this->input->post('txt_branch_id'));
+        echo "Branch has been edited";
+    }
+    
+    public function delete_branch(){  
+        ?>
+        Are you sure you want to delete item id <?php echo $this->input->post('post_id');?>? 
+        <?php
+    }
+    
+    public function deleting_branch(){  
+        # MODEL
+        $this->load->model('get_system');
+        $this->get_system->delete_item_id($_POST['post_id']); 
     }
 }
