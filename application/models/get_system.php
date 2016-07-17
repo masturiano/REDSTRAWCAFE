@@ -454,6 +454,28 @@ class Get_system extends CI_Model {
         return $query->result();
     }
     
+    # CHECK BRANCH NUMBER IF EXISTING
+    function check_branch_no($post_branch_no)
+    {
+        $query = "
+            select 
+                branch_id,
+                branch_no,
+                branch_name,
+                address,
+                owner,
+                mobile_no,
+                tel_no,
+                date_enter,
+                date_update
+            from 
+                tbl_branch
+            where 
+                branch_no = '{$post_branch_no}'
+        ";
+        return $query = $this->db->query($query);
+    }  
+    
     # ADD NEW BRANCH
     function add_new_branch($data){
         echo $this->db->insert("tbl_branch", $data);
@@ -470,9 +492,9 @@ class Get_system extends CI_Model {
         $query_delete_item_id = "
             delete 
             from 
-                tbl_items
+                tbl_branch
             where 
-                item_id = {$post_id}
+                branch_id = {$post_id}
         ";
         $this->db->query($query_delete_item_id);
     }

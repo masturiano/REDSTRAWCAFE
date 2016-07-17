@@ -744,14 +744,6 @@ class Systema extends CI_Controller {
         <form data-toggle="validator" role="form" id="add_form" method="POST">
             <table id="table_add" border="0" class="table table-condensed table-striped">
                 <tr>
-                    <td class="table_label"><b>Branch id</b></td>
-                    <td class="table_colon"><b>:</b></td>
-                    <td class="table_data">
-                        <?php echo $row->branch_id; ?>
-                        <input type="hidden" class="form-control" name="txt_branch_id" id="txt_branch_id" value="<?php echo $row->branch_id; ?>"> 
-                    </td>
-                </tr>
-                <tr>
                     <td class="table_label"><b>Branch No.</b></td>
                     <td class="table_colon"><b>:</b></td>
                     <td class="table_data">
@@ -804,6 +796,20 @@ class Systema extends CI_Controller {
         <?php
     } 
     
+    public function check_branch_no(){
+        # MODEL
+        $this->load->model('get_system');    
+        
+        $result_existing_branch_no =  $this->get_system->check_branch_no($this->input->post('txt_branch_no')); 
+        
+        if ($result_existing_branch_no->num_rows() > 0){
+           echo "1";
+        }
+        else{
+           echo "0"; 
+        } 
+    }
+    
     public function adding_branch(){  
         # MODEL
         $this->load->model('get_system'); 
@@ -854,23 +860,8 @@ class Systema extends CI_Controller {
         <script type="text/javascript">
             // ALLOW NUMERIC ONLY ON TEXTFIELD
             $(function(){
-                $("#txt_unit_price,#txt_rel_price,#txt_fran_price").keydown(function (e) {
-                    // Allow: backspace, delete, tab, escape, enter and .
-                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                         // Allow: Ctrl+A, Command+A
-                        (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
-                         // Allow: home, end, left, right, down, up
-                        (e.keyCode >= 35 && e.keyCode <= 40)) {
-                             // let it happen, don't do anything
-                             return;
-                    }
-                    // Ensure that it is a number and stop the keypress
-                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                        e.preventDefault();
-                    }
-                });
                 // WITHOUT DOT
-                $("#txt_no_item,#txt_lower_limit").keydown(function (e) {
+                $("#txt_mobile_no,#txt_tel_no").keydown(function (e) {
                     // Allow: backspace, delete, tab, escape, enter and .
                     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
                          // Allow: Ctrl+A, Command+A
@@ -967,19 +958,19 @@ class Systema extends CI_Controller {
             "tel_no" => $this->input->post('txt_tel_no'),
             "date_update" => $row->current_date_time
         );
-        $this->get_system->edit_item_id($edit_branch,$this->input->post('txt_branch_id'));
+        $this->get_system->edit_branch_id($edit_branch,$this->input->post('txt_branch_id'));
         echo "Branch has been edited";
     }
     
     public function delete_branch(){  
         ?>
-        Are you sure you want to delete item id <?php echo $this->input->post('post_id');?>? 
+        Are you sure you want to delete branch id <?php echo $this->input->post('post_id');?>? 
         <?php
     }
     
     public function deleting_branch(){  
         # MODEL
         $this->load->model('get_system');
-        $this->get_system->delete_item_id($_POST['post_id']); 
+        $this->get_system->delete_branch_id($_POST['post_id']); 
     }
 }

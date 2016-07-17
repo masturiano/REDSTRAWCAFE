@@ -183,7 +183,7 @@
                             data: $('#add_form').serialize(),
                             success: function(data){ 
                                 if(data == 1){
-                                    bootbox.alert("Username alerady exist!", function() {
+                                    bootbox.alert("Username already exist!", function() {
                                         $('#txt_user_name').css("border","red solid 1px");  
                                     });  
                                     return false;  

@@ -208,18 +208,33 @@
                         }
                         
                         $.ajax({
-                            url: "<?php echo base_url('systema/adding_branch');?>",
+                            url: "<?php echo base_url('systema/check_branch_no');?>",
                             type: "POST",
                             data: $('#add_form').serialize(),
-                            success: function(){ 
-                                $('#addUser').modal('hide');  
-                                bootbox.alert("Branch successfully added!", function() {
-                                    $('#btn_edit').attr('disabled','disabled');
-                                    $('#btn_delete').attr('disabled','disabled'); 
-                                    document.location.reload();
-                                });
+                            success: function(data){ 
+                                if(data == 1){
+                                    bootbox.alert("Branch number already exist!", function() {
+                                        $('#txt_branch_no').css("border","red solid 1px");  
+                                    });  
+                                    return false;  
+                                }
+                                else{  
+                                    $.ajax({
+                                        url: "<?php echo base_url('systema/adding_branch');?>",
+                                        type: "POST",
+                                        data: $('#add_form').serialize(),
+                                        success: function(){ 
+                                            $('#addUser').modal('hide');  
+                                            bootbox.alert("Branch successfully added!", function() {
+                                                $('#btn_edit').attr('disabled','disabled');
+                                                $('#btn_delete').attr('disabled','disabled'); 
+                                                document.location.reload();
+                                            });
+                                        }         
+                                    }); 
+                                }
                             }         
-                        });    
+                        });
                     });
                 }         
             });   
@@ -238,119 +253,94 @@
                     $('#saving').click( function (e) {
                         e.stopImmediatePropagation();
                         
-                        if($('#cmb_group_code').val() == 0){
-                            bootbox.alert("Please select group code!", function() {  
-                                $('#cmb_group_code').css("border","red solid 1px");  
+                        if($('#txt_branch_no').val().length == 0){
+                            bootbox.alert("Please input Branch Name!", function() {  
+                                $('#txt_branch_no').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#cmb_group_code').css("border","gray solid 1px");    
-                        } 
-                       
-                        if($('#txt_description').val().length == 0){
-                            bootbox.alert("Please input Description!", function() {  
-                                $('#txt_description').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_description').css("border","gray solid 1px");    
+                            $('#txt_branch_no').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_packaging').val().length == 0){
-                            bootbox.alert("Please input Packaging!", function() {  
-                                $('#txt_packaging').css("border","red solid 1px");  
+                        if($('#txt_branch_name').val().length == 0){
+                            bootbox.alert("Please input Branch Name!", function() {  
+                                $('#txt_branch_name').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_packaging').css("border","gray solid 1px");    
+                            $('#txt_branch_name').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_unit_price').val().length == 0){
-                            bootbox.alert("Please input Unit Price!", function() {  
-                                $('#txt_unit_price').css("border","red solid 1px");  
+                        if($('#txt_address').val().length == 0){
+                            bootbox.alert("Please input Address!", function() {  
+                                $('#txt_address').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_unit_price').css("border","gray solid 1px");    
+                            $('#txt_address').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_rel_price').val().length == 0){
-                            bootbox.alert("Please input Relative Price!", function() {  
-                                $('#txt_rel_price').css("border","red solid 1px");  
+                        if($('#txt_owner').val().length == 0){
+                            bootbox.alert("Please input Owner!", function() {  
+                                $('#txt_owner').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_rel_price').css("border","gray solid 1px");    
+                            $('#txt_owner').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_fran_price').val().length == 0){
-                            bootbox.alert("Please input Franchise Price!", function() {  
-                                $('#txt_fran_price').css("border","red solid 1px");  
+                        if($('#txt_mobile_no').val().length == 0){
+                            bootbox.alert("Please input Mobile Number!", function() {  
+                                $('#txt_mobile_no').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_fran_price').css("border","gray solid 1px");    
+                            $('#txt_mobile_no').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_no_item').val().length == 0){
-                            bootbox.alert("Please input No. of Item!", function() {  
-                                $('#txt_no_item').css("border","red solid 1px");  
+                        if($('#txt_tel_no').val().length == 0){
+                            bootbox.alert("Please input Tel Number!", function() {  
+                                $('#txt_tel_no').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_no_item').css("border","gray solid 1px");    
+                            $('#txt_tel_no').css("border","gray solid 1px");    
                         }
                         
-                        if($('#txt_lower_limit').val().length == 0){
-                            bootbox.alert("Please input Lower Limit!", function() {  
-                                $('#txt_lower_limit').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_lower_limit').css("border","gray solid 1px");    
-                        }
-                        
-                        if(Math.round($('#txt_unit_price').val() * 100) > Math.round($('#txt_rel_price').val() * 100)){
-                            bootbox.alert("Unit Price must be lower than Relative Price!", function() {  
-                                $('#txt_rel_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_rel_price').css("border","gray solid 1px");    
-                        }
-                        
-                        if(Math.round($('#txt_unit_price').val() * 100) > Math.round($('#txt_fran_price').val() * 100)){
-                            bootbox.alert("Unit Price must be lower than Franchise Price!", function() {  
-                                $('#txt_fran_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_fran_price').css("border","gray solid 1px");    
-                        }
-                         
                         $.ajax({
-                            url: "<?php echo base_url('systema/editing_item');?>",
+                            url: "<?php echo base_url('systema/check_branch_no');?>",
                             type: "POST",
-                            data: $('#edit_form').serialize()+"&post_id="+value,
-                            success: function(){
-                                $('#editUser').modal('hide');  
-                                bootbox.alert("Item successfully edited!", function() {
-                                    $('#btn_edit').attr('disabled','disabled');
-                                    $('#btn_delete').attr('disabled','disabled'); 
-                                    document.location.reload();
-                                });
+                            data: $('#add_form').serialize(),
+                            success: function(data){ 
+                                if(data == 1){
+                                    bootbox.alert("Branch number already exist!", function() {
+                                        $('#txt_branch_no').css("border","red solid 1px");  
+                                    });  
+                                    return false;  
+                                }
+                                else{   
+                                    $.ajax({
+                                        url: "<?php echo base_url('systema/editing_branch');?>",
+                                        type: "POST",
+                                        data: $('#edit_form').serialize()+"&post_id="+value,
+                                        success: function(){
+                                            $('#editUser').modal('hide');  
+                                            bootbox.alert("Branch successfully edited!", function() {
+                                                $('#btn_edit').attr('disabled','disabled');
+                                                $('#btn_delete').attr('disabled','disabled'); 
+                                                document.location.reload();
+                                            });
+                                        }         
+                                    }); 
+                                }
                             }         
-                        });   
+                        });  
                     });
                 }         
             });  
@@ -360,7 +350,7 @@
         function delete_user(value){             
             $.ajax({
                 cache: false,
-                url: "<?php echo base_url('systema/delete_item');?>",
+                url: "<?php echo base_url('systema/delete_branch');?>",
                 type: "POST",
                 data: "post_id="+value,
                 success: function(data){
@@ -370,11 +360,11 @@
                     $('#deleting').click( function (e) {
                         e.stopImmediatePropagation(); 
                         $.ajax({
-                            url: "<?php echo base_url('systema/deleting_item');?>",
+                            url: "<?php echo base_url('systema/deleting_branch');?>",
                             type: "POST",
                             data: "post_id="+value,
                             success: function(){
-                                bootbox.alert("Item successfully deleted!", function() {
+                                bootbox.alert("Branch successfully deleted!", function() {
                                     $('#btn_edit').attr('disabled','disabled');
                                     $('#btn_delete').attr('disabled','disabled'); 
                                     document.location.reload();
