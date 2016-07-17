@@ -96,7 +96,7 @@ $session_user_level = $this->session->userdata('userLevel');
                         ($session_user_level == 3)
                     ){
                     ?>
-                    <li><a href="<? echo site_url('process_ho/encode'); ?>" class="homeIcon" title="Home"><span>Encode</span></a></li>
+                    <li><a href="<? echo site_url('process_add_stock/display_stock'); ?>" class="homeIcon" title="Home"><span>Add Stock</span></a></li>
                     <?php
                     }
                     ?>
