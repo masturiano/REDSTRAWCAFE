@@ -83,7 +83,7 @@ class Process_add_stock extends CI_Controller {
             });
         </script>
         
-        <form id="edit_form" method="POST">
+        <form id="add_stock_form" method="POST">
             <table id="table_edit" border="0" class="table table-condensed table-striped">
                 <tr>
                     <td class="table_label"><b>Item id</b></td>
@@ -132,4 +132,38 @@ class Process_add_stock extends CI_Controller {
         </form>
         <?php
     }   
+    
+    public function adding_stock(){  
+        # MODEL
+        $this->load->model('get_process_add_stock');
+
+        # GET CURRENT DATE
+        $result_current_date_time = $this->get_process_add_stock->get_server_current_date_time();
+        if ($result_current_date_time->num_rows() > 0){
+           $row = $result_current_date_time->row();
+        }
+        else{
+           $row = "0"; 
+        } 
+        
+        # GET STOCK COUNT BASE ON SELECTED ITEM
+        $result_item_details = $this->get_process_add_stock->get_add_stock_details($this->input->post('post_id'));
+         
+        if ($result_item_details->num_rows() > 0){
+           $row_stock_count = $result_item_details->row();
+        }
+        else{
+           $row_stock_count = "0"; 
+        }
+        
+        # ADD ITEM COUNT AND ADDITIONAL STOCK
+        $new_stock_count = (int)$row_stock_count->no_of_items + (int)$this->input->post('txt_no_item');
+        
+        $edit_item = array(
+            "no_of_items" => $new_stock_count,
+            "date_update" => $row->current_date_time
+        );
+        $this->get_process_add_stock->edit_item_id($edit_item,$this->input->post('txt_item_id'));
+        echo "Item stock has been edited";
+    }
 }

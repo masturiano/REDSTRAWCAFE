@@ -8,7 +8,7 @@ class Get_process_add_stock extends CI_Model {
     function get_server_current_date_time()
     {
         $query_current_date = "
-            select GETDATE() as current_date_time
+            select NOW() as current_date_time
         ";
         return $query = $this->db->query($query_current_date);
     }
@@ -66,5 +66,10 @@ class Get_process_add_stock extends CI_Model {
                 a.item_id = {$item_id} 
         ";
         return $query = $this->db->query($query_item_detail);
+    }
+    
+    # EDIT ITEM ID    
+    function edit_item_id($data,$item_id){
+        $this->db->update("tbl_items", $data, "item_id = {$item_id}");
     }
 }

@@ -104,66 +104,6 @@
                     $('#saving').click( function (e) {
                         e.stopImmediatePropagation();
                         
-                        if($('#cmb_group_code').val() == 0){
-                            bootbox.alert("Please select group code!", function() {  
-                                $('#cmb_group_code').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#cmb_group_code').css("border","gray solid 1px");    
-                        } 
-                       
-                        if($('#txt_description').val().length == 0){
-                            bootbox.alert("Please input Description!", function() {  
-                                $('#txt_description').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_description').css("border","gray solid 1px");    
-                        }
-                        
-                        if($('#txt_packaging').val().length == 0){
-                            bootbox.alert("Please input Packaging!", function() {  
-                                $('#txt_packaging').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_packaging').css("border","gray solid 1px");    
-                        }
-                        
-                        if($('#txt_unit_price').val().length == 0){
-                            bootbox.alert("Please input Unit Price!", function() {  
-                                $('#txt_unit_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_unit_price').css("border","gray solid 1px");    
-                        }
-                        
-                        if($('#txt_rel_price').val().length == 0){
-                            bootbox.alert("Please input Relative Price!", function() {  
-                                $('#txt_rel_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_rel_price').css("border","gray solid 1px");    
-                        }
-                        
-                        if($('#txt_fran_price').val().length == 0){
-                            bootbox.alert("Please input Franchise Price!", function() {  
-                                $('#txt_fran_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_fran_price').css("border","gray solid 1px");    
-                        }
-                        
                         if($('#txt_no_item').val().length == 0){
                             bootbox.alert("Please input No. of Item!", function() {  
                                 $('#txt_no_item').css("border","red solid 1px");  
@@ -173,41 +113,11 @@
                         else{
                             $('#txt_no_item').css("border","gray solid 1px");    
                         }
-                        
-                        if($('#txt_lower_limit').val().length == 0){
-                            bootbox.alert("Please input Lower Limit!", function() {  
-                                $('#txt_lower_limit').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_lower_limit').css("border","gray solid 1px");    
-                        }
-                        
-                        if(Math.round($('#txt_unit_price').val() * 100) > Math.round($('#txt_rel_price').val() * 100)){
-                            bootbox.alert("Unit Price must be lower than Relative Price!", function() {  
-                                $('#txt_rel_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_rel_price').css("border","gray solid 1px");    
-                        }
-                        
-                        if(Math.round($('#txt_unit_price').val() * 100) > Math.round($('#txt_fran_price').val() * 100)){
-                            bootbox.alert("Unit Price must be lower than Franchise Price!", function() {  
-                                $('#txt_fran_price').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_fran_price').css("border","gray solid 1px");    
-                        }
                          
                         $.ajax({
-                            url: "<?php echo base_url('systema/editing_item');?>",
+                            url: "<?php echo base_url('process_add_stock/adding_stock');?>",
                             type: "POST",
-                            data: $('#edit_form').serialize()+"&post_id="+value,
+                            data: $('#add_stock_form').serialize()+"&post_id="+value,
                             success: function(){
                                 $('#editUser').modal('hide');  
                                 bootbox.alert("Item successfully edited!", function() {
