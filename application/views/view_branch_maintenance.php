@@ -518,7 +518,9 @@
     <br/><br/>
     <div class="footer_bg">
         <div align="center">
-        &copy; 2015 Puregold Price Club Inc. IT-HO Mydel-Ar A. Asturiano All Rights Reserved
+        <?php 
+        include('view_copy_right.php');
+        ?>
         </div>    
     </div> 
 
