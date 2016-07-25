@@ -26,10 +26,59 @@
             setTimeout("checkSession()",10000); 
         } 
         
-        function buyerSelected(){
-            alert('test');
+        function buyerSelect(){
+            if($('#dropdown_buyer').val() == 'select'){
+                bootbox.alert("Please select buyer!", function() {
+                    $('#dropdown_buyer').css("border","red solid 1px");
+                });    
+                return false;
+            }
+            else{
+                $('#dropdown_buyer').css("border","lightgray solid 1px");  
+                createHeader($('#dropdown_buyer').val());  
+            }
         }
-               
+        
+        function createHeader(value){
+            $.ajax({
+                url: "<?php echo base_url('process_purchase_order/get_order_no');?>",
+                type: "POST",
+                data: "post_buyer="+value,
+                success: function(data){  
+                    alert(data);
+                    return false;
+                    $('#create_header .modal-body').html(data);
+                    $('#create_header').modal('show');
+                    $('#saving').click( function (e) {
+                        e.stopImmediatePropagation();
+                        
+                        if($('#txt_no_item').val().length == 0){
+                            bootbox.alert("Please input No. of Item!", function() {  
+                                $('#txt_no_item').css("border","red solid 1px");  
+                            }); 
+                            return false;
+                        } 
+                        else{
+                            $('#txt_no_item').css("border","gray solid 1px");    
+                        }
+                         
+                        $.ajax({
+                            url: "<?php echo base_url('process_add_stock/adding_stock');?>",
+                            type: "POST",
+                            data: $('#add_stock_form').serialize()+"&post_id="+value,
+                            success: function(){
+                                $('#editUser').modal('hide');  
+                                bootbox.alert("Item successfully edited!", function() {
+                                    $('#btn_edit').attr('disabled','disabled');
+                                    $('#btn_delete').attr('disabled','disabled'); 
+                                    document.location.reload();
+                                });
+                            }         
+                        });   
+                    });
+                }       
+            });   
+        }       
         
         
         
@@ -44,8 +93,8 @@
                 type: "POST",
                 data: "post_id="+value,
                 success: function(data){  
-                    $('#editUser .modal-body').html(data);
-                    $('#editUser').modal('show');
+                    $('#create_header .modal-body').html(data);
+                    $('#create_header').modal('show');
                     $('#saving').click( function (e) {
                         e.stopImmediatePropagation();
                         
@@ -109,9 +158,9 @@
                 <tr>
                     <td width="10%"> Buyer </td>
                     <td width="1%"> : </td>
-                    <td> <?php echo form_dropdown('buyer', $price_option, 'buyer', 'class="form-control" id="my_id"'); ?></td>
+                    <td> <?php echo form_dropdown('dropdown_buyer', $price_option, 'dropdown_buyer', 'class="form-control" id="dropdown_buyer"'); ?></td>
                     <td width="1%">  </td>
-                    <td> <?php echo form_button($button,'Click Me','onclick="buyerSelected();"')?> </td>
+                    <td> <?php echo form_button($button,'Click Me','onclick="buyerSelect();"')?> </td>
                 </tr>
             </table>
         </div>
@@ -123,7 +172,24 @@
         <?php 
         include('view_copy_right.php');
         ?>
-        </div>    
+        </div> 
+        
+        <div class="modal fade" id="create_header" tabindex="-1" role="dialog" aria-labelledby="create_header" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Create Header</h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="saving" class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>   
     </div> 
 
     </body>
