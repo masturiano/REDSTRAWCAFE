@@ -29,7 +29,7 @@ div#menu {
 /* menu::base */
 #menu {
     position:relative;
-    z-index:100;
+    z-index:1;
     height:43px;
 }
 #menu .menu {

@@ -511,6 +511,40 @@ table#table_copy_data td.table_data{
 }
 
 /*-------------------------
+DIV TABLE PURCHASE HEADER
+---------------------------*/
+table#table_purchase_header{
+    border: 0px solid #999;
+    background-color: transparent;
+    font-family: 'Exo', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    width: 100%;
+}
+
+table#table_purchase_header td.table_label{
+    width: 250px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_purchase_header td.table_colon{
+    width: 10px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_purchase_header td.table_data{
+    width: 500px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+    margin-top:-2px;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+}
+
+/*-------------------------
 MODAL HEADER COLOR
 ---------------------------*/                 
 .modal-header{
@@ -519,5 +553,5 @@ MODAL HEADER COLOR
     border-top-right-radius: .3em;
     font-family: 'Exo', sans-serif;
     font-size: 12px;
-     color: #ffffff;
+    color: #ffffff;
 }

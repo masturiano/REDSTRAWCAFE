@@ -45,21 +45,22 @@
                 type: "POST",
                 data: "post_buyer="+value,
                 success: function(data){  
-                    alert(data);
-                    return false;
-                    $('#create_header .modal-body').html(data);
+                    value = data.length; 
+                    value_add_zero = $("#text_order_no").val('00000000000000000000'+data);
+                    value_display = value_add_zero.val().slice(value);
+                    $('#text_order_no').val(value_display);
+                    //$('#create_header .modal-body').html(data);
                     $('#create_header').modal('show');
                     $('#saving').click( function (e) {
                         e.stopImmediatePropagation();
-                        
-                        if($('#txt_no_item').val().length == 0){
-                            bootbox.alert("Please input No. of Item!", function() {  
-                                $('#txt_no_item').css("border","red solid 1px");  
+                        if($('#text_branch_name').val().length == 0){
+                            bootbox.alert("Please search Branch Name!", function() {  
+                                $('#text_branch_name').css("border","red solid 1px");  
                             }); 
                             return false;
                         } 
                         else{
-                            $('#txt_no_item').css("border","gray solid 1px");    
+                            $('#text_branch_name').css("border","gray solid 1px");    
                         }
                          
                         $.ajax({
@@ -80,51 +81,34 @@
             });   
         }       
         
-        
-        
-        // BOOT GRID
-        // Refer to http://jquery-bootgrid.com/Documentation for methods, events and settings
-        // load gird on page\e load... 
-        
-        // ADD STOCK
-        function add_stock(value){ 
-            $.ajax({
-                url: "<?php echo base_url('process_add_stock/add_stock');?>",
-                type: "POST",
-                data: "post_id="+value,
-                success: function(data){  
-                    $('#create_header .modal-body').html(data);
-                    $('#create_header').modal('show');
-                    $('#saving').click( function (e) {
-                        e.stopImmediatePropagation();
-                        
-                        if($('#txt_no_item').val().length == 0){
-                            bootbox.alert("Please input No. of Item!", function() {  
-                                $('#txt_no_item').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#txt_no_item').css("border","gray solid 1px");    
-                        }
-                         
-                        $.ajax({
-                            url: "<?php echo base_url('process_add_stock/adding_stock');?>",
-                            type: "POST",
-                            data: $('#add_stock_form').serialize()+"&post_id="+value,
-                            success: function(){
-                                $('#editUser').modal('hide');  
-                                bootbox.alert("Item successfully edited!", function() {
-                                    $('#btn_edit').attr('disabled','disabled');
-                                    $('#btn_delete').attr('disabled','disabled'); 
-                                    document.location.reload();
-                                });
-                            }         
-                        });   
-                    });
-                }       
+        // TEXTFIELD AUTO COMPLETE
+        $(function(){
+            $("#text_branch_name").autocomplete({
+                source: "<?php echo base_url('process_purchase_order/search_branch_name');?>",
+                minLength: 1,
+                select: function(event, ui) {    
+                    var content = ui.item.id;
+                    $("#txt_tax_payer_id").val(content); 
+                    var content2 = ui.item.label2; 
+                    $("#txt_bir_reg_name").val(content2);
+                    // CHECK IF TIN NO EXIST IN DB
+                    $.ajax({
+                        url: "<?php echo base_url('process/check_tin_number');?>",
+                        type: "POST",
+                        data: "post_tin_no="+content,
+                        success: function(data){
+                            if(data == 1){   
+                                $('#txt_bir_reg_name').attr('readonly','readonly');  
+                            } 
+                            else{
+                                $('#txt_bir_reg_name').removeAttr('readonly'); 
+                            }   
+                        }         
+                    }); 
+                    
+                }
             });   
-        };  
+        });
     </script>   
                                                         
     </head>
@@ -182,6 +166,38 @@
                 <h4 class="modal-title" id="myModalLabel">Create Header</h4>
               </div>
               <div class="modal-body">
+                <form id="purchase_header_form" method="POST">
+                    <table id="table_purchase_header" border="0" class="table table-condensed table-striped">
+                        <tr>
+                            <td class="table_label"><b>Branch Name</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_branch_name); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Order No.</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_order_no); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Branch No.</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_branch_no); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Owner</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_branch_no); ?>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
               </div>
               <div class="modal-footer">
                 <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>

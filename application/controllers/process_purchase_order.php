@@ -25,7 +25,7 @@ class Process_purchase_order extends CI_Controller {
         }    
     }
     
-    #########################( ADD STOCK )#########################
+    #########################( PURCHASE ORDER )#########################
     
     public function display_order_form(){
         # TITLE
@@ -37,7 +37,7 @@ class Process_purchase_order extends CI_Controller {
         # MODEL
         //$this->load->model('get_process_add_stock'); 
          
-        # FORM
+        # FORM BUYER
         $data['price_option'] = array(
             'select'  => 'Select',
             'rel_price'  => 'Relative',
@@ -51,6 +51,46 @@ class Process_purchase_order extends CI_Controller {
             'type' => 'reset',
             'content' => 'Create',
             'class' => 'form-control',
+        );
+        
+        # FORM PURCHASE ORDER HEADER
+        $data['text_branch_name'] = array(
+            'name'        => 'text_branch_name',
+            'id'          => 'text_branch_name',
+            'maxlength'   => '50',
+            'size'        => '50',                              
+            'style'       => 'width:100%',
+            'class' => 'form-control'
+        );  
+        
+        $data['text_order_no'] = array(
+            'name'        => 'text_order_no',
+            'id'          => 'text_order_no',
+            'maxlength'   => '10',
+            'size'        => '10',                              
+            'style'       => 'width:100%',
+            'class' => 'form-control',
+            'disabled'   => 'disabled'
+        );
+        
+        $data['text_branch_no'] = array(
+            'name'        => 'text_branch_no',
+            'id'          => 'text_branch_no',
+            'maxlength'   => '50',
+            'size'        => '50',                              
+            'style'       => 'width:100%',
+            'class' => 'form-control',
+            'disabled'   => 'disabled'
+        );
+        
+        $data['text_owner'] = array(
+            'name'        => 'text_owner',
+            'id'          => 'text_owner',
+            'maxlength'   => '50',
+            'size'        => '50',                              
+            'style'       => 'width:100%',
+            'class' => 'form-control',
+            'disabled'   => 'disabled'
         );
         
         # VIEW
@@ -72,4 +112,20 @@ class Process_purchase_order extends CI_Controller {
            echo $row_order_no = "0"; 
         }
     } 
+    
+    public function search_branch_name(){ 
+        # MODEL
+        $this->load->model('get_process_purchase_order');
+
+        $arrResult = array();
+            $arrRegName = $this->get_process_purchase_order->get_branch_name($_GET['term']);
+                foreach($arrRegName as $val){
+                    $arrResult[] = array(
+                        "id"=>$val->TIN,
+                        "label"=>$val->TIN." - ".$val->BIR_REG_NAME,
+                        "label2"=>$val->BIR_REG_NAME,
+                        "value" => strip_tags($val->TIN));    
+                }
+        echo json_encode($arrResult);    
+    }
 }
