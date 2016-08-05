@@ -17,9 +17,9 @@
     <link href="<? echo base_url('includes/showLoading/css/showLoading.css'); ?>" rel="stylesheet">
 
 <!-- JS -->   
-    <!-- Jquery UI Minified Javascript -->
+    <!-- Jquery UI Minified Javascript -->    
     <script src="<? echo base_url('includes/jquery/js/jquery-1.6.2.min.js'); ?>"></script>
-    <script src="<? echo base_url('includes/jquery/js/jquery-ui-1.8.23.custom.min.js'); ?>"></script>  
+      
     <!-- Jquery Running Time Javascript -->     
     <script src="<? echo base_url('includes/running_time/running_time.js'); ?>"></script>
     <!-- Menu Javascript -->
@@ -39,4 +39,7 @@
     <!-- Html 5 Shiv Minified Javascript -->
     <script src="<? echo base_url('includes/bootstrap/js/html5shiv.min.js'); ?>" type="text/javascript"></script>
     <!-- Respond Minified Javascript -->
-    <script src="<? echo base_url('includes/bootstrap/js/respond.min.js'); ?>" type="text/javascript"></script>     
+    <script src="<? echo base_url('includes/bootstrap/js/respond.min.js'); ?>" type="text/javascript"></script>   
+    
+    <!-- Jquery UI Minified Javascript -->
+    <script src="<? echo base_url('includes/jquery/js/jquery-ui-1.8.23.custom.min.js'); ?>"></script>  

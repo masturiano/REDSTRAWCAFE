@@ -545,6 +545,40 @@ table#table_purchase_header td.table_data{
 }
 
 /*-------------------------
+DIV TABLE PURCHASE DETAIL
+---------------------------*/
+table#table_purchase_detail{
+    border: 0px solid #999;
+    background-color: transparent;
+    font-family: 'Exo', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    width: 100%;
+}
+
+table#table_purchase_detail td.table_label{
+    width: 250px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_purchase_detail td.table_colon{
+    width: 10px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_purchase_detail td.table_data{
+    width: 500px;
+    border-bottom: 1px solid #999;
+    border-color: #1dbfb9;
+    margin-top:-2px;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+}
+
+/*-------------------------
 MODAL HEADER COLOR
 ---------------------------*/                 
 .modal-header{
@@ -554,4 +588,24 @@ MODAL HEADER COLOR
     font-family: 'Exo', sans-serif;
     font-size: 12px;
     color: #ffffff;
+}
+
+
+
+body .modal-header {
+    /* new custom width */
+    width: 748px;
+
+}
+
+body .modal-body{
+    /* new custom width */
+    width: 750px;
+
+}
+
+body .modal-dialog{
+    /* new custom width */
+    width: 750px;
+
 }

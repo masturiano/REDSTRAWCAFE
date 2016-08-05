@@ -54,43 +54,74 @@ class Process_purchase_order extends CI_Controller {
         );
         
         # FORM PURCHASE ORDER HEADER
+        $data['text_buyer'] = array(
+            'name' => 'text_buyer',
+            'id' => 'text_buyer',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control'
+        );
+        
+        $data['text_branch_id'] = array(
+            'name' => 'text_branch_id',
+            'id' => 'text_branch_id',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control'
+        ); 
+        
         $data['text_branch_name'] = array(
-            'name'        => 'text_branch_name',
-            'id'          => 'text_branch_name',
-            'maxlength'   => '50',
-            'size'        => '50',                              
-            'style'       => 'width:100%',
+            'name' => 'text_branch_name',
+            'id' => 'text_branch_name',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
             'class' => 'form-control'
         );  
         
         $data['text_order_no'] = array(
-            'name'        => 'text_order_no',
-            'id'          => 'text_order_no',
-            'maxlength'   => '10',
-            'size'        => '10',                              
-            'style'       => 'width:100%',
+            'name' => 'text_order_no',
+            'id' => 'text_order_no',
+            'maxlength' => '10',
+            'size' => '10',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
             'class' => 'form-control',
-            'disabled'   => 'disabled'
         );
         
         $data['text_branch_no'] = array(
-            'name'        => 'text_branch_no',
-            'id'          => 'text_branch_no',
-            'maxlength'   => '50',
-            'size'        => '50',                              
-            'style'       => 'width:100%',
+            'name' => 'text_branch_no',
+            'id' => 'text_branch_no',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
             'class' => 'form-control',
-            'disabled'   => 'disabled'
         );
         
         $data['text_owner'] = array(
-            'name'        => 'text_owner',
-            'id'          => 'text_owner',
-            'maxlength'   => '50',
-            'size'        => '50',                              
-            'style'       => 'width:100%',
+            'name' => 'text_owner',
+            'id' => 'text_owner',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
             'class' => 'form-control',
-            'disabled'   => 'disabled'
+        );
+        
+        # FORM PURCHASE ORDER DETAIL
+        $data['text_order_no_detail'] = array(
+            'name' => 'text_order_no_detail',
+            'id' => 'text_order_no_detail',
+            'maxlength' => '10',
+            'size' => '10',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
         );
         
         # VIEW
@@ -101,7 +132,7 @@ class Process_purchase_order extends CI_Controller {
         # MODEL
         $this->load->model('get_process_purchase_order'); 
         
-        # GET TRANSMITTAL NUMBER
+        # GET ORDER NUMBER
         $result_order_number = $this->get_process_purchase_order->get_order_number();
 
         if ($result_order_number->num_rows() > 0){
@@ -121,11 +152,40 @@ class Process_purchase_order extends CI_Controller {
             $arrRegName = $this->get_process_purchase_order->get_branch_name($_GET['term']);
                 foreach($arrRegName as $val){
                     $arrResult[] = array(
-                        "id"=>$val->TIN,
-                        "label"=>$val->TIN." - ".$val->BIR_REG_NAME,
-                        "label2"=>$val->BIR_REG_NAME,
-                        "value" => strip_tags($val->TIN));    
+                        "id"=>$val->branch_id,
+                        "label"=>$val->branch_name,
+                        "label2"=>$val->branch_no,
+                        "label3"=>$val->owner,
+                    );
                 }
         echo json_encode($arrResult);    
+    }
+    
+    function saving_header(){
+        # MODEL
+        $this->load->model('get_process_purchase_order'); 
+        
+        # GET CURRENT DATE
+        $result_current_date_time = $this->get_process_purchase_order->get_server_current_date_time();   
+        if ($result_current_date_time->num_rows() > 0){
+           $row = $result_current_date_time->row();
+        }
+        else{
+           $row = "0"; 
+        } 
+        
+        $new_header = array(
+            "buyer" => $this->input->post('text_buyer'),
+            "purchase_order_no" => $this->input->post('text_order_no'),
+            "branch_id" => $this->input->post('text_branch_id'), 
+            "branch_no" => $this->input->post('text_branch_no'), 
+            "branch_name" => $this->input->post('text_branch_name'), 
+            "owner" => $this->input->post('text_owner'), 
+            "amount" => 0.00, 
+            "date_enter" => $row->current_date_time,
+            "date_update" => null
+        );
+        $this->get_process_purchase_order->add_new_header($new_header);
+        echo "New header has been save";
     }
 }

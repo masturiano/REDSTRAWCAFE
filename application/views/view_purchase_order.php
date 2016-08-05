@@ -40,17 +40,32 @@
         }
         
         function createHeader(value){
+            // START AVOID CLOSING THE MODAL
+            $('#create_header').modal({
+                backdrop: 'static',
+                keyboard: false
+            }); 
+            // END AVOID CLOSING THE MODAL
             $.ajax({
                 url: "<?php echo base_url('process_purchase_order/get_order_no');?>",
                 type: "POST",
                 data: "post_buyer="+value,
                 success: function(data){  
-                    value = data.length; 
-                    value_add_zero = $("#text_order_no").val('00000000000000000000'+data);
-                    value_display = value_add_zero.val().slice(value);
-                    $('#text_order_no').val(value_display);
-                    //$('#create_header .modal-body').html(data);
-                    $('#create_header').modal('show');
+                    order_no = data.length; 
+                    order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data);
+                    order_no_display = order_no_add_zero.val().slice(order_no);
+                    
+                    $('#text_buyer').val(value);
+                    $('#text_order_no').val(order_no_display);
+                    $('#disp_order_no').html(order_no_display);
+                    $("#text_branch_id").val('');  
+                    $("#text_branch_name").val('');                                              
+                    $("#text_branch_no").val(''); 
+                    $("#text_owner").val('');                                         
+                    $("#disp_branch_no").html(''); 
+                    $("#disp_owner").html('');  
+                         
+                    $('#create_header').modal('show'); 
                     $('#saving').click( function (e) {
                         e.stopImmediatePropagation();
                         if($('#text_branch_name').val().length == 0){
@@ -62,50 +77,123 @@
                         else{
                             $('#text_branch_name').css("border","gray solid 1px");    
                         }
+                        if($('#text_branch_no').val().length == 0){
+                            bootbox.alert("Please search Branch Name!", function() {  
+                                $('#text_branch_name').css("border","red solid 1px");  
+                            }); 
+                            return false;
+                        } 
+                        else{
+                            $('#text_branch_name').css("border","gray solid 1px");    
+                        }
+                        if($('#text_owner').val().length == 0){
+                            bootbox.alert("Please search Branch Name!", function() {  
+                                $('#text_branch_name').css("border","red solid 1px");  
+                            }); 
+                            return false;
+                        } 
+                        else{
+                            $('#text_branch_name').css("border","gray solid 1px");    
+                        }
                          
                         $.ajax({
-                            url: "<?php echo base_url('process_add_stock/adding_stock');?>",
+                            url: "<?php echo base_url('process_purchase_order/saving_header');?>",
                             type: "POST",
-                            data: $('#add_stock_form').serialize()+"&post_id="+value,
+                            data: $('#purchase_header_form').serialize(),
                             success: function(){
-                                $('#editUser').modal('hide');  
-                                bootbox.alert("Item successfully edited!", function() {
-                                    $('#btn_edit').attr('disabled','disabled');
-                                    $('#btn_delete').attr('disabled','disabled'); 
-                                    document.location.reload();
-                                });
+                                bootbox.alert("Header successfully saved!", function() {  
+                                    $('#create_header').modal('hide'); 
+                                    createDetails(order_no_display);
+                                });  
                             }         
                         });   
                     });
                 }       
             });   
-        }       
+        }   
+        
+        function createDetails(order_no_display){
+            // START AVOID CLOSING THE MODAL
+            $('#create_details').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            // END AVOID CLOSING THE MODAL
+            $('#text_order_no_detail').val(order_no_display);
+            $('#disp_order_no_detail').html(order_no_display);
+                    
+            $('#create_details').modal('show');
+            $('#saving').click( function (e) {
+                e.stopImmediatePropagation();
+                if($('#text_branch_name').val().length == 0){
+                    bootbox.alert("Please search Branch Name!", function() {  
+                        $('#text_branch_name').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_branch_name').css("border","gray solid 1px");    
+                }
+                if($('#text_branch_no').val().length == 0){
+                    bootbox.alert("Please search Branch Name!", function() {  
+                        $('#text_branch_name').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_branch_name').css("border","gray solid 1px");    
+                }
+                if($('#text_owner').val().length == 0){
+                    bootbox.alert("Please search Branch Name!", function() {  
+                        $('#text_branch_name').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_branch_name').css("border","gray solid 1px");    
+                }
+                 
+                $.ajax({
+                    url: "<?php echo base_url('process_purchase_order/saving_header');?>",
+                    type: "POST",
+                    data: $('#purchase_header_form').serialize(),
+                    success: function(){ 
+                        createDetails(value_display); 
+                    }         
+                });   
+            });
+            //$('#editUser').modal('hide');  
+            //bootbox.alert("Item successfully edited!", function() {
+            //    $('#btn_edit').attr('disabled','disabled');
+            //    $('#btn_delete').attr('disabled','disabled'); 
+            //    document.location.reload();
+            //});
+        }
+        
+        // CLEAR TEXTFIELD AUTO COMPLETE
+        function clearTextfield(){
+            $("#text_branch_name").val('');
+            $("#text_branch_id").val('');                                               
+            $("#text_branch_no").val(''); 
+            $("#text_owner").val('');       
+        }    
         
         // TEXTFIELD AUTO COMPLETE
         $(function(){
             $("#text_branch_name").autocomplete({
                 source: "<?php echo base_url('process_purchase_order/search_branch_name');?>",
                 minLength: 1,
-                select: function(event, ui) {    
+                select: function(event, ui) {
                     var content = ui.item.id;
-                    $("#txt_tax_payer_id").val(content); 
-                    var content2 = ui.item.label2; 
-                    $("#txt_bir_reg_name").val(content2);
-                    // CHECK IF TIN NO EXIST IN DB
-                    $.ajax({
-                        url: "<?php echo base_url('process/check_tin_number');?>",
-                        type: "POST",
-                        data: "post_tin_no="+content,
-                        success: function(data){
-                            if(data == 1){   
-                                $('#txt_bir_reg_name').attr('readonly','readonly');  
-                            } 
-                            else{
-                                $('#txt_bir_reg_name').removeAttr('readonly'); 
-                            }   
-                        }         
-                    }); 
-                    
+                    $("#text_branch_id").val(content);  
+                    var content2 = ui.item.label; 
+                    $("#text_branch_name").val(content2);                                              
+                    var content3 = ui.item.label2;
+                    $("#text_branch_no").val(content3); 
+                    $("#disp_branch_no").html(content3); 
+                    var content4 = ui.item.label3; 
+                    $("#text_owner").val(content4);
+                    $("#disp_owner").html(content4);
                 }
             });   
         });
@@ -167,38 +255,71 @@
               </div>
               <div class="modal-body">
                 <form id="purchase_header_form" method="POST">
+                    <?php echo form_input($text_buyer,''); ?>
+                    <?php echo form_input($text_branch_id,''); ?>
                     <table id="table_purchase_header" border="0" class="table table-condensed table-striped">
                         <tr>
                             <td class="table_label"><b>Branch Name</b></td>
                             <td class="table_colon"><b>:</b></td>
                             <td class="table_data">
-                                <?php echo form_input($text_branch_name); ?>
+                                <?php echo form_input($text_branch_name,'Click Me','onclick="clearTextfield();"'); ?>
                             </td>
                         </tr>
                         <tr>
                             <td class="table_label"><b>Order No.</b></td>
                             <td class="table_colon"><b>:</b></td>
                             <td class="table_data">
-                                <?php echo form_input($text_order_no); ?>
+                                <div id="disp_order_no"></div>
+                                <?php echo form_input($text_order_no,''); ?>
                             </td>
                         </tr>
                         <tr>
                             <td class="table_label"><b>Branch No.</b></td>
                             <td class="table_colon"><b>:</b></td>
                             <td class="table_data">
-                                <?php echo form_input($text_branch_no); ?>
+                                <div id="disp_branch_no"></div>
+                                <?php echo form_input($text_branch_no,''); ?>
                             </td>
                         </tr>
                         <tr>
                             <td class="table_label"><b>Owner</b></td>
                             <td class="table_colon"><b>:</b></td>
                             <td class="table_data">
-                                <?php echo form_input($text_branch_no); ?>
+                                <div id="disp_owner"></div>
+                                <?php echo form_input($text_owner,''); ?>
                             </td>
                         </tr>
                     </table>
                 </form>
               </div>
+              <div class="modal-footer">
+                <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="saving" class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div> 
+        
+        <div class="modal fade" id="create_details" tabindex="-1" role="dialog" aria-labelledby="create_details" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Create Details</h4>
+              </div>
+              <div class="modal-body">
+                <form id="purchase_detail_form" method="POST">
+                    <table id="table_purchase_detail" border="0" class="table table-condensed table-striped">
+                        <tr>
+                            <td class="table_label"><b>Order No.</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_order_no_detail"></div>
+                                <?php echo form_input($text_order_no_detail,''); ?>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
               <div class="modal-footer">
                 <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" id="saving" class="btn btn-primary">Save</button>
