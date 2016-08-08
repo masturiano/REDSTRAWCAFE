@@ -124,6 +124,25 @@ class Process_purchase_order extends CI_Controller {
             'class' => 'form-control',
         );
         
+        $data['text_item_description'] = array(
+            'name' => 'text_item_description',
+            'id' => 'text_item_description',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'class' => 'form-control'
+        ); 
+        
+        $data['text_unit_price'] = array(
+            'name' => 'text_unit_price',
+            'id' => 'text_unit_price',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );
+        
         # VIEW
         $this->load->view('view_purchase_order',$data); 
     }  
@@ -187,5 +206,25 @@ class Process_purchase_order extends CI_Controller {
         );
         $this->get_process_purchase_order->add_new_header($new_header);
         echo "New header has been save";
+    }
+    
+    public function search_item_description(){ 
+        # MODEL
+        $this->load->model('get_process_purchase_order');
+
+        $arrResult = array();
+            $arrRegName = $this->get_process_purchase_order->get_item_description($_GET['term'],$_GET['order_no']);
+                foreach($arrRegName as $val){
+                    $arrResult[] = array(
+                        "id"=>$val->item_id,
+                        "label"=>$val->description,
+                        "label2"=>$val->unit_price,
+                        "label3"=>$val->buyer_price,
+                        "label4"=>$val->group_code,
+                        "label5"=>$val->packaging,
+                        "label6"=>$val->no_of_items,
+                    );
+                }
+        echo json_encode($arrResult);    
     }
 }

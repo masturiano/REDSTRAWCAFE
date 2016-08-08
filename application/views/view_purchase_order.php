@@ -175,7 +175,8 @@
             $("#text_branch_name").val('');
             $("#text_branch_id").val('');                                               
             $("#text_branch_no").val(''); 
-            $("#text_owner").val('');       
+            $("#text_owner").val(''); 
+            $("#text_item_description").val('');      
         }    
         
         // TEXTFIELD AUTO COMPLETE
@@ -195,9 +196,52 @@
                     $("#text_owner").val(content4);
                     $("#disp_owner").html(content4);
                 }
+            });  
+            $("#text_item_description").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "<?php echo base_url('process_purchase_order/search_item_description/');?>",
+                        dataType: "json",
+                        data: {
+                            term : request.term,
+                            order_no : $('#text_order_no_detail').val()
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    var content = ui.item.id;
+                    $("#text_branch_id").val(content);  
+                    var content2 = ui.item.label; 
+                    $("#text_description").val(content2);                                              
+                    var content3 = ui.item.label2;
+                    $("#text_unit_price").val(content3); 
+                    $("#disp_unit_price").html(content3); 
+                    var content4 = ui.item.label3; 
+                    $("#text_owner").val(content4);
+                    $("#disp_owner").html(content4);
+                }
             });   
         });
     </script>   
+    
+    <style type="text/css">
+        body .modal-header {
+            /* new custom width */
+            width: 748px;
+        }
+        body .modal-body{
+            /* new custom width */
+            width: 750px;
+        }
+        body .modal-dialog{
+            /* new custom width */
+            width: 750px;
+        }
+    </style>
                                                         
     </head>
 
@@ -316,6 +360,21 @@
                             <td class="table_data">
                                 <div id="disp_order_no_detail"></div>
                                 <?php echo form_input($text_order_no_detail,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Item Description</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_item_description,'Click Me','onclick="clearTextfield();"'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Unit Price</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_unit_price"></div>
+                                <?php echo form_input($text_unit_price,''); ?>
                             </td>
                         </tr>
                     </table>

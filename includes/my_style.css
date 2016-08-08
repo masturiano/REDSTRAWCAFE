@@ -589,23 +589,3 @@ MODAL HEADER COLOR
     font-size: 12px;
     color: #ffffff;
 }
-
-
-
-body .modal-header {
-    /* new custom width */
-    width: 748px;
-
-}
-
-body .modal-body{
-    /* new custom width */
-    width: 750px;
-
-}
-
-body .modal-dialog{
-    /* new custom width */
-    width: 750px;
-
-}
