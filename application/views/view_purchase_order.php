@@ -219,10 +219,20 @@
                     $("#text_description").val(content2);                                              
                     var content3 = ui.item.label2;
                     $("#text_unit_price").val(content3); 
-                    $("#disp_unit_price").html(content3); 
                     var content4 = ui.item.label3; 
-                    $("#text_owner").val(content4);
-                    $("#disp_owner").html(content4);
+                    $("#text_buyer_price").val(content4);
+                    $("#disp_buyer_price").html(content4);
+                    var content5 = ui.item.label4; 
+                    $("#text_group_code").val(content5);
+                    var content6 = ui.item.label5; 
+                    $("#text_group_name").val(content6);
+                    $("#disp_group_name").html(content6);
+                    var content7 = ui.item.label6; 
+                    $("#text_packaging").val(content7);
+                    $("#disp_packaging").html(content7);
+                    var content8 = ui.item.label7; 
+                    $("#text_no_of_items").val(content8);
+                    $("#disp_no_of_items").html(content8);
                 }
             });   
         });
@@ -353,6 +363,8 @@
               </div>
               <div class="modal-body">
                 <form id="purchase_detail_form" method="POST">
+                    <?php echo form_input($text_unit_price,''); ?>
+                    <?php echo form_input($text_group_code,''); ?>
                     <table id="table_purchase_detail" border="0" class="table table-condensed table-striped">
                         <tr>
                             <td class="table_label"><b>Order No.</b></td>
@@ -370,11 +382,35 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="table_label"><b>Unit Price</b></td>
+                            <td class="table_label"><b>Price</b></td>
                             <td class="table_colon"><b>:</b></td>
                             <td class="table_data">
-                                <div id="disp_unit_price"></div>
-                                <?php echo form_input($text_unit_price,''); ?>
+                                <div id="disp_buyer_price"></div>
+                                <?php echo form_input($text_buyer_price,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Group Name</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_group_name"></div>
+                                <?php echo form_input($text_group_name,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Packaging</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_packaging"></div>
+                                <?php echo form_input($text_packaging,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Available Items</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_no_of_items"></div>
+                                <?php echo form_input($text_no_of_items,''); ?>
                             </td>
                         </tr>
                     </table>

@@ -141,7 +141,57 @@ class Process_purchase_order extends CI_Controller {
             'style' => 'width:100%',
             'type' => 'hidden',
             'class' => 'form-control',
-        );
+        );  
+        
+        $data['text_buyer_price'] = array(
+            'name' => 'text_buyer_price',
+            'id' => 'text_buyer_price',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );  
+        
+        $data['text_group_code'] = array(
+            'name' => 'text_group_code',
+            'id' => 'text_group_code',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );  
+        
+        $data['text_group_name'] = array(
+            'name' => 'text_group_name',
+            'id' => 'text_group_name',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );    
+        
+        $data['text_packaging'] = array(
+            'name' => 'text_packaging',
+            'id' => 'text_packaging',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );  
+        
+        $data['text_no_of_items'] = array(
+            'name' => 'text_no_of_items',
+            'id' => 'text_no_of_items',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );                      
         
         # VIEW
         $this->load->view('view_purchase_order',$data); 
@@ -221,8 +271,9 @@ class Process_purchase_order extends CI_Controller {
                         "label2"=>$val->unit_price,
                         "label3"=>$val->buyer_price,
                         "label4"=>$val->group_code,
-                        "label5"=>$val->packaging,
-                        "label6"=>$val->no_of_items,
+                        "label5"=>$val->group_name,
+                        "label6"=>$val->packaging,
+                        "label7"=>$val->no_of_items,
                     );
                 }
         echo json_encode($arrResult);    
