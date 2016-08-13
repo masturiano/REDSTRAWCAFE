@@ -123,36 +123,53 @@
             $('#disp_order_no_detail').html(order_no_display);
                     
             $('#create_details').modal('show');
-            $('#saving').click( function (e) {
+            $('#saving_details').click( function (e) {
                 e.stopImmediatePropagation();
-                if($('#text_branch_name').val().length == 0){
-                    bootbox.alert("Please search Branch Name!", function() {  
-                        $('#text_branch_name').css("border","red solid 1px");  
+                if($('#text_item_description').val().length == 0){
+                    bootbox.alert("Please search Item Description!", function() {  
+                        $('#text_item_description').css("border","red solid 1px");  
                     }); 
                     return false;
                 } 
                 else{
-                    $('#text_branch_name').css("border","gray solid 1px");    
+                    $('#text_item_description').css("border","gray solid 1px");    
                 }
-                if($('#text_branch_no').val().length == 0){
-                    bootbox.alert("Please search Branch Name!", function() {  
-                        $('#text_branch_name').css("border","red solid 1px");  
+                if($('#text_buyer_price').val().length == 0){
+                    bootbox.alert("Please search Item Description!", function() {  
+                        $('#text_buyer_price').css("border","red solid 1px");  
                     }); 
                     return false;
                 } 
                 else{
-                    $('#text_branch_name').css("border","gray solid 1px");    
+                    $('#text_buyer_price').css("border","gray solid 1px");    
                 }
-                if($('#text_owner').val().length == 0){
-                    bootbox.alert("Please search Branch Name!", function() {  
-                        $('#text_branch_name').css("border","red solid 1px");  
+                if($('#text_group_name').val().length == 0){
+                    bootbox.alert("Please search Item Description!", function() {  
+                        $('#text_group_name').css("border","red solid 1px");  
                     }); 
                     return false;
                 } 
                 else{
-                    $('#text_branch_name').css("border","gray solid 1px");    
+                    $('#text_group_name').css("border","gray solid 1px");    
                 }
-                 
+                if($('#text_packaging').val().length == 0){
+                    bootbox.alert("Please search Item Description!", function() {  
+                        $('#text_packaging').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_packaging').css("border","gray solid 1px");    
+                } 
+                if($('#text_no_of_items').val().length == 0){
+                    bootbox.alert("Please search Item Description!", function() {  
+                        $('#text_no_of_items').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_no_of_items').css("border","gray solid 1px");    
+                } 
                 $.ajax({
                     url: "<?php echo base_url('process_purchase_order/saving_header');?>",
                     type: "POST",
@@ -173,10 +190,21 @@
         // CLEAR TEXTFIELD AUTO COMPLETE
         function clearTextfield(){
             $("#text_branch_name").val('');
-            $("#text_branch_id").val('');                                               
+            $("#text_branch_id").val('');  
+            $("#disp_branch_no").html('');                                             
             $("#text_branch_no").val(''); 
+            $("#disp_owner").html('');
             $("#text_owner").val(''); 
-            $("#text_item_description").val('');      
+            // DETAILS
+            $("#text_item_description").val(''); 
+            $("#disp_buyer_price").html('');
+            $("#text_buyer_price").val('');
+            $("#disp_group_name").html('');
+            $("#text_group_name").val('');
+            $("#disp_packaging").html('');
+            $("#text_packaging").val('');
+            $("#disp_no_of_items").html('');
+            $("#text_no_of_items").val('');
         }    
         
         // TEXTFIELD AUTO COMPLETE
@@ -241,15 +269,15 @@
     <style type="text/css">
         body .modal-header {
             /* new custom width */
-            width: 748px;
+            width: 948px;
         }
-        body .modal-body{
+        body .modalbody{
             /* new custom width */
-            width: 750px;
+            width: 950px;
         }
         body .modal-dialog{
             /* new custom width */
-            width: 750px;
+            width: 950px;
         }
     </style>
                                                         
@@ -416,8 +444,8 @@
                     </table>
                 </form>
               <div class="modal-footer">
-                <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="saving" class="btn btn-primary">Save</button>
+                <button type="button" id="save_details_close" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="saving_details" class="btn btn-primary">Save</button>
               </div>
             </div>
           </div>
