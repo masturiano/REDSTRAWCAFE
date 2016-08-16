@@ -66,7 +66,7 @@
                     $("#disp_owner").html('');  
                          
                     $('#create_header').modal('show'); 
-                    $('#saving').click( function (e) {
+                    $('#saving_header').click( function (e) {
                         e.stopImmediatePropagation();
                         if($('#text_branch_name').val().length == 0){
                             bootbox.alert("Please search Branch Name!", function() {  
@@ -171,11 +171,11 @@
                     $('#text_no_of_items').css("border","gray solid 1px");    
                 } 
                 $.ajax({
-                    url: "<?php echo base_url('process_purchase_order/saving_header');?>",
+                    url: "<?php echo base_url('process_purchase_order/saving_details');?>",
                     type: "POST",
-                    data: $('#purchase_header_form').serialize(),
+                    data: $('#purchase_detail_form').serialize(),
                     success: function(){ 
-                        createDetails(value_display); 
+                        alert('Details Save'); 
                     }         
                 });   
             });
@@ -242,7 +242,7 @@
                 minLength: 1,
                 select: function(event, ui) {
                     var content = ui.item.id;
-                    $("#text_branch_id").val(content);  
+                    $("#text_item_id").val(content);  
                     var content2 = ui.item.label; 
                     $("#text_description").val(content2);                                              
                     var content3 = ui.item.label2;
@@ -376,7 +376,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" id="save_close" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="saving" class="btn btn-primary">Save</button>
+                <button type="button" id="saving_header" class="btn btn-primary">Save</button>
               </div>
             </div>
           </div>
@@ -391,6 +391,7 @@
               </div>
               <div class="modal-body">
                 <form id="purchase_detail_form" method="POST">
+                    <?php echo form_input($text_item_id,''); ?>
                     <?php echo form_input($text_unit_price,''); ?>
                     <?php echo form_input($text_group_code,''); ?>
                     <table id="table_purchase_detail" border="0" class="table table-condensed table-striped">
@@ -439,6 +440,13 @@
                             <td class="table_data">
                                 <div id="disp_no_of_items"></div>
                                 <?php echo form_input($text_no_of_items,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Input No. of Items</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <?php echo form_input($text_input_no_of_items,''); ?>
                             </td>
                         </tr>
                     </table>

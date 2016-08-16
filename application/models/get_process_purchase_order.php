@@ -111,5 +111,8 @@ class Get_process_purchase_order extends CI_Model {
         return $query = $this->db->query($query_item_description);
     } 
     
-    
+    # SAVE NEW HEADER
+    function add_new_detail($data){
+        echo $this->db->insert("tbl_purchase_order_details", $data);
+    }
 }

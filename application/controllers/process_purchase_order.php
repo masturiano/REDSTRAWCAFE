@@ -114,6 +114,16 @@ class Process_purchase_order extends CI_Controller {
         );
         
         # FORM PURCHASE ORDER DETAIL
+        $data['text_item_id'] = array(
+            'name' => 'text_item_id',
+            'id' => 'text_item_id',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'type' => 'hidden',
+            'class' => 'form-control',
+        );  
+        
         $data['text_order_no_detail'] = array(
             'name' => 'text_order_no_detail',
             'id' => 'text_order_no_detail',
@@ -191,7 +201,16 @@ class Process_purchase_order extends CI_Controller {
             'style' => 'width:100%',
             'type' => 'hidden',
             'class' => 'form-control',
-        );                      
+        );  
+        
+        $data['text_input_no_of_items'] = array(
+            'name' => 'text_input_no_of_items',
+            'id' => 'text_input_no_of_items',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'class' => 'form-control'
+        );                     
         
         # VIEW
         $this->load->view('view_purchase_order',$data); 
@@ -277,5 +296,32 @@ class Process_purchase_order extends CI_Controller {
                     );
                 }
         echo json_encode($arrResult);    
+    }
+    
+    function saving_details(){
+        # MODEL
+        $this->load->model('get_process_purchase_order'); 
+        
+        # GET CURRENT DATE
+        $result_current_date_time = $this->get_process_purchase_order->get_server_current_date_time();   
+        if ($result_current_date_time->num_rows() > 0){
+           $row = $result_current_date_time->row();
+        }
+        else{
+           $row = "0"; 
+        } 
+        
+        $add_details = array(
+            "purchase_order_no" => $this->input->post('text_order_no_detail'),
+            "item_id" => $this->input->post('text_item_id'),
+            "group_code" => $this->input->post('text_group_code'), 
+            "no_of_items" => $this->input->post('text_no_of_items'), 
+            "unit_price" => $this->input->post('text_unit_price'), 
+            "buyer_price" => $this->input->post('text_buyer_price'), 
+            "date_enter" => $row->current_date_time,
+            "date_update" => null
+        );
+        $this->get_process_purchase_order->add_new_detail($add_details);
+        echo "Details has been save";
     }
 }
