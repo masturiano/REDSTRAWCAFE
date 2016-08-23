@@ -113,6 +113,25 @@ class Get_process_purchase_order extends CI_Model {
     
     # SAVE NEW HEADER
     function add_new_detail($data){
-        echo $this->db->insert("tbl_purchase_order_details", $data);
+        return $this->db->insert("tbl_purchase_order_details", $data);
+    }
+    
+    # GET TOTAL DETAILS
+    function get_total_detail($purchase_order_no)
+    {
+        $total_buyer_price = "
+            select
+                sum(buyer_price) as total_buyer_price
+            from
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$purchase_order_no}
+        ";
+        return $query = $this->db->query($total_buyer_price);
+    }
+    
+    # EDIT ITEM ID    
+    function edit_header_amount($data,$purchase_order_no){
+        $this->db->update("tbl_purchase_order_header", $data, "purchase_order_no = {$purchase_order_no}");
     }
 }

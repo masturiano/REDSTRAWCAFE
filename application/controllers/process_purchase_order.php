@@ -321,7 +321,23 @@ class Process_purchase_order extends CI_Controller {
             "date_enter" => $row->current_date_time,
             "date_update" => null
         );
-        $this->get_process_purchase_order->add_new_detail($add_details);
+        if($this->get_process_purchase_order->add_new_detail($add_details))
+        {
+            $result_total_details = $this->get_process_purchase_order->get_total_detail($this->input->post('text_order_no_detail'));
+            if ($result_total_details->num_rows() > 0)
+            {
+                $row_total_details = $result_total_details->row();
+                $edit_header = array(
+                    "amount" => $row_total_details->total_buyer_price,
+                    "date_update" => $row->current_date_time
+                );
+               $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('text_order_no_detail'));
+            }
+            else{
+                echo "error";
+                $row_total_details = "0"; 
+            }
+        }
         echo "Details has been save";
     }
 }
