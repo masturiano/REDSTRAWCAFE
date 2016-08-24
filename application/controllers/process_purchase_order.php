@@ -311,13 +311,16 @@ class Process_purchase_order extends CI_Controller {
            $row = "0"; 
         } 
         
+        $added_price = $this->input->post('text_input_no_of_items') *  $this->input->post('text_buyer_price');
         $add_details = array(
             "purchase_order_no" => $this->input->post('text_order_no_detail'),
             "item_id" => $this->input->post('text_item_id'),
             "group_code" => $this->input->post('text_group_code'), 
             "no_of_items" => $this->input->post('text_no_of_items'), 
             "unit_price" => $this->input->post('text_unit_price'), 
-            "buyer_price" => $this->input->post('text_buyer_price'), 
+            "buyer_price" => $this->input->post('text_buyer_price'),
+            "input_no_of_items" => $this->input->post('text_input_no_of_items'),  
+            "added_price" => $added_price,  
             "date_enter" => $row->current_date_time,
             "date_update" => null
         );

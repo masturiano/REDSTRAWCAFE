@@ -170,6 +170,24 @@
                 else{
                     $('#text_no_of_items').css("border","gray solid 1px");    
                 } 
+                if($('#text_input_no_of_items').val().length == 0){
+                    bootbox.alert("Please input no. of items!", function() {  
+                        $('#text_input_no_of_items').css("border","red solid 1px");  
+                    }); 
+                    return false;
+                } 
+                else{
+                    $('#text_input_no_of_items').css("border","gray solid 1px");    
+                } 
+                if(parseInt($('#text_input_no_of_items').val()) > parseInt($('#text_no_of_items').val())){
+                    bootbox.alert("Available Items must be greater than no. of items!", function() {  
+                        $('#text_input_no_of_items').css("border","red solid 1px");  
+                    });                                 
+                    return false;
+                } 
+                else{
+                    $('#text_input_no_of_items').css("border","gray solid 1px");    
+                } 
                 $.ajax({
                     url: "<?php echo base_url('process_purchase_order/saving_details');?>",
                     type: "POST",
