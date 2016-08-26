@@ -121,7 +121,7 @@ class Get_process_purchase_order extends CI_Model {
     {
         $total_buyer_price = "
             select
-                sum(buyer_price) as total_buyer_price
+                sum(added_price) as total_added_price
             from
                 tbl_purchase_order_details
             where 
@@ -134,4 +134,39 @@ class Get_process_purchase_order extends CI_Model {
     function edit_header_amount($data,$purchase_order_no){
         $this->db->update("tbl_purchase_order_header", $data, "purchase_order_no = {$purchase_order_no}");
     }
+    
+    # GET ITEM DESCRIPTION
+    function get_item_details($item_description,$order_no)
+    {
+        $result_buyer_price = $this->get_buyer_price($order_no);
+        if ($result_buyer_price->num_rows() > 0){
+           $row = $result_buyer_price->row();
+        }
+        else{
+           $row = "0"; 
+        }         
+        $query_item_description = "
+            select 
+                a.item_id,
+                a.group_code,
+                b.group_name,
+                a.description,
+                a.packaging,
+                a.unit_price,
+                a.{$row->buyer} as buyer_price,
+                a.no_of_items,
+                a.lower_limit,
+                a.date_enter,
+                a.date_update
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+            where
+                a.description like '%{$item_description}%'
+        ";
+        $query = $this->db->query($query_item_description);
+        return $query->result();
+    } 
 }

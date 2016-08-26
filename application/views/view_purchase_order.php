@@ -26,6 +26,115 @@
             setTimeout("checkSession()",10000); 
         } 
         
+        // BOOT GRID
+        // Refer to http://jquery-bootgrid.com/Documentation for methods, events and settings
+        // load gird on page\e load...
+        
+        //selection:true,
+        //multiSelect: true,
+        //rowSelect : true,   
+        $(function()
+        {
+            function init()
+            {
+                $("#div_disp_data").show();
+                $("#grid-data").bootgrid({
+                    formatters: {
+                        "link": function(column, row)
+                        {
+                            return "<?php echo base_url('systema/user_maintenance');?>" + column.id + ": " + row.id + "</a>";
+                        }
+                    },
+                    rowCount: [10, 50, 75, -1]
+                }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+                    var value = $("#grid-data").bootgrid("getSelectedRows");
+                    if(value.length == 0){
+                        $('#btn_edit').attr('disabled','disabled'); 
+                        $('#btn_delete').attr('disabled','disabled'); 
+                    }
+                    else if(value.length == 1){
+                        $('#btn_edit').removeAttr('disabled');
+                        $('#btn_delete').removeAttr('disabled'); 
+                    }
+                    else{    
+                        $('#btn_edit').attr('disabled','disabled'); 
+                        $('#btn_delete').attr('disabled','disabled'); 
+                    }                                                    
+                }).on("deselected.rs.jquery.bootgrid", function (e, rows){
+                    var value = $("#grid-data").bootgrid("getSelectedRows");
+                    if(value.length == 0){
+                        $('#btn_edit').attr('disabled','disabled'); 
+                        $('#btn_delete').attr('disabled','disabled'); 
+                    }
+                    else if(value.length == 1){
+                        $('#btn_edit').removeAttr('disabled');
+                        $('#btn_delete').removeAttr('disabled'); 
+                    }
+                    else{    
+                        $('#btn_edit').attr('disabled','disabled'); 
+                        $('#btn_delete').attr('disabled','disabled'); 
+                    }       
+                })  
+            }
+            
+            init();    
+            
+            $("#btn_add").on("click", function ()
+            {
+                var value = $("#grid-data").bootgrid("getSelectedRows");
+                // SELECT TABLE ROW         
+                $.ajax({           
+                    url: "<?php echo base_url('systema/user_maintenance');?>",
+                    type: "POST",
+                    data: "post_id="+value,
+                    success: function(){
+                                             
+                        $("#div_disp_data").show();  
+                        $('#btn_encode').removeAttr('disabled'); 
+                        $('#div_encode_sawt').modal('hide');   
+                        add_user(value)     
+                    }         
+                });  
+            }); 
+            
+            $("#btn_edit").on("click", function ()
+            {
+                var value = $("#grid-data").bootgrid("getSelectedRows");
+                // SELECT TABLE ROW         
+                $.ajax({           
+                    url: "<?php echo base_url('systema/user_maintenance');?>",
+                    type: "POST",
+                    data: "post_id="+value,
+                    success: function(){
+                                             
+                        $("#div_disp_data").show();  
+                        $('#btn_encode').removeAttr('disabled'); 
+                        $('#div_encode_sawt').modal('hide');   
+                        edit_user(value)     
+                    }         
+                });  
+            });
+            
+            $("#btn_delete").on("click", function ()
+            {
+                var value = $("#grid-data").bootgrid("getSelectedRows");
+                // SELECT TABLE ROW         
+                $.ajax({           
+                    url: "<?php echo base_url('systema/user_maintenance');?>",
+                    type: "POST",
+                    data: "post_id="+value,
+                    success: function(){
+                                             
+                        $("#div_disp_data").show();  
+                        $('#btn_encode').removeAttr('disabled'); 
+                        $('#div_encode_sawt').modal('hide');   
+                        delete_user(value)     
+                    }         
+                });  
+            });
+            
+        });  
+        
         function buyerSelect(){
             if($('#dropdown_buyer').val() == 'select'){
                 bootbox.alert("Please select buyer!", function() {
@@ -123,6 +232,10 @@
             $('#disp_order_no_detail').html(order_no_display);
                     
             $('#create_details').modal('show');
+            $('#btn_view_details').click( function (e) {
+                e.stopImmediatePropagation();
+                viewDetails(order_no_display);
+            });
             $('#saving_details').click( function (e) {
                 e.stopImmediatePropagation();
                 if($('#text_item_description').val().length == 0){
@@ -194,6 +307,7 @@
                     data: $('#purchase_detail_form').serialize(),
                     success: function(){ 
                         alert('Details Save'); 
+                        clearTextfield();
                     }         
                 });   
             });
@@ -204,6 +318,24 @@
             //    document.location.reload();
             //});
         }
+        
+        function viewDetails(order_no_display){
+            // START AVOID CLOSING THE MODAL
+            $('#view_details').modal({
+                backdrop: 'static',
+                keyboard: false
+            }); 
+            // END AVOID CLOSING THE MODAL 
+            $.ajax({
+                url: "<?php echo base_url('process_purchase_order/view_details');?>",
+                type: "POST",
+                data: "post_purchase_order_no="+order_no_display,
+                success: function(data){  
+                    $('#view_details').modal('show'); 
+                    
+                }       
+            });   
+        }  
         
         // CLEAR TEXTFIELD AUTO COMPLETE
         function clearTextfield(){
@@ -223,6 +355,7 @@
             $("#text_packaging").val('');
             $("#disp_no_of_items").html('');
             $("#text_no_of_items").val('');
+            $("#text_input_no_of_items").val('');
         }    
         
         // TEXTFIELD AUTO COMPLETE
@@ -281,6 +414,25 @@
                     $("#disp_no_of_items").html(content8);
                 }
             });   
+        });
+        
+        // ALLOW NUMERIC ONLY ON TEXTFIELD
+        $(function(){
+            $("#text_input_no_of_items").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                     // Allow: Ctrl+A, Command+A
+                    (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+                     // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                         // let it happen, don't do anything
+                         return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>   
     
@@ -470,9 +622,63 @@
                     </table>
                 </form>
               <div class="modal-footer">
+                <button type="button" id="btn_view_details" class="btn btn-default" data-dismiss="modal">View Details</button>   
                 <button type="button" id="save_details_close" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" id="saving_details" class="btn btn-primary">Save</button>
               </div>
+            </div>
+          </div>
+        </div>   
+    </div> 
+    
+    <div class="modal fade" id="view_details" tabindex="-1" role="dialog" aria-labelledby="create_details" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">View Details</h4>
+              </div>
+              <div class="modal-body" style="overflow-y: auto; height: 500px;">
+                <div id="div_disp_data" style="display:none;">
+                    &nbsp;
+                    <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
+                                    
+                    <table id="grid-data" class="table table-condensed table-hover table-striped"
+                    data-selection="true" 
+                    data-multi-select="false" 
+                    data-row-select="true" 
+                    data-keep-selection="true">
+                        <thead>
+                            <tr class="clickable-row"> 
+                                <!-- data-column-id="sender" data-column-id="received" -->
+                                <th data-column-id="id" data-type="numeric" data-identifier="true" data-order="asc" >Id</th>
+                                <th data-column-id="full_name">Full Name</th>
+                                <th data-column-id="user_name">User Name</th>
+                                <th data-column-id="user_pass" data-visible="false" <?=$view_password;?>>User Password</th>
+                                <th data-column-id="dept_short_desc">Position</th>
+                                <th data-column-id="date_enter">Date / Time Enter</th>
+                                <th data-column-id="user_stat">User Stat</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                //foreach($result_user_maintenance as $row){
+                            ?>
+                            <tr>
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_id; ?>1</td>
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->full_name; ?>2</td>
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_name; ?>3</td> 
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo base64_decode($row->user_pass); ?></td> 
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->group_name; ?>4</td> 
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo date('Y-m-d H:i:s',strtotime($row->date_enter)); ?>5</td>
+                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_stat_description; ?>6</td> 
+                            </tr>
+                            <?php
+                                //}
+                            ?>
+                        </tbody>
+                    </table> 
+                </div>   
             </div>
           </div>
         </div>   

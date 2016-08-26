@@ -331,7 +331,7 @@ class Process_purchase_order extends CI_Controller {
             {
                 $row_total_details = $result_total_details->row();
                 $edit_header = array(
-                    "amount" => $row_total_details->total_buyer_price,
+                    "amount" => $row_total_details->total_added_price,
                     "date_update" => $row->current_date_time
                 );
                $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('text_order_no_detail'));
@@ -342,5 +342,13 @@ class Process_purchase_order extends CI_Controller {
             }
         }
         echo "Details has been save";
+    }
+    
+    function view_details($post_purchase_order_no){
+        # MODEL
+        $this->load->model('get_process_purchase_order'); 
+        
+        # GET GROUP CODE
+        $data['result_order_detail'] = $this->get_process_purchase_order->get_user_group($post_purchase_order_no); 
     }
 }
