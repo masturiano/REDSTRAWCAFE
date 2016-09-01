@@ -302,14 +302,30 @@
                     $('#text_input_no_of_items').css("border","gray solid 1px");    
                 } 
                 $.ajax({
-                    url: "<?php echo base_url('process_purchase_order/saving_details');?>",
+                    url: "<?php echo base_url('process_purchase_order/get_order_no_details_item');?>",
                     type: "POST",
                     data: $('#purchase_detail_form').serialize(),
-                    success: function(){ 
-                        alert('Details Save'); 
-                        clearTextfield();
+                    success: function(data){ 
+                        if(data == 1)
+                        {
+                            bootbox.alert("Item already added! Delete the item first on view details!", function() {  
+                                $('#text_item_description').css("border","red solid 1px");  
+                            });
+                        }
+                        else
+                        {
+                           $.ajax({
+                                url: "<?php echo base_url('process_purchase_order/saving_details');?>",
+                                type: "POST",
+                                data: $('#purchase_detail_form').serialize(),
+                                success: function(){ 
+                                    alert('Details Save'); 
+                                    clearTextfield();
+                                }         
+                            });     
+                        }
                     }         
-                });   
+                });  
             });
             //$('#editUser').modal('hide');  
             //bootbox.alert("Item successfully edited!", function() {
@@ -331,8 +347,9 @@
                 type: "POST",
                 data: "post_purchase_order_no="+order_no_display,
                 success: function(data){  
+                    //console.log(data);   
+                    $('#view_details .modal-body').html(data);
                     $('#view_details').modal('show'); 
-                    
                 }       
             });   
         }  
@@ -641,48 +658,27 @@
               <div class="modal-body" style="overflow-y: auto; height: 500px;">
                 <div id="div_disp_data" style="display:none;">
                     &nbsp;
-                    <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
-                                    
-                    <table id="grid-data" class="table table-condensed table-hover table-striped"
-                    data-selection="true" 
-                    data-multi-select="false" 
-                    data-row-select="true" 
-                    data-keep-selection="true">
-                        <thead>
-                            <tr class="clickable-row"> 
-                                <!-- data-column-id="sender" data-column-id="received" -->
-                                <th data-column-id="id" data-type="numeric" data-identifier="true" data-order="asc" >Id</th>
-                                <th data-column-id="full_name">Full Name</th>
-                                <th data-column-id="user_name">User Name</th>
-                                <th data-column-id="user_pass" data-visible="false" <?=$view_password;?>>User Password</th>
-                                <th data-column-id="dept_short_desc">Position</th>
-                                <th data-column-id="date_enter">Date / Time Enter</th>
-                                <th data-column-id="user_stat">User Stat</th>  
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                //foreach($result_user_maintenance as $row){
-                            ?>
-                            <tr>
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_id; ?>1</td>
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->full_name; ?>2</td>
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_name; ?>3</td> 
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo base64_decode($row->user_pass); ?></td> 
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->group_name; ?>4</td> 
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo date('Y-m-d H:i:s',strtotime($row->date_enter)); ?>5</td>
-                                <td id="<?php //echo $row->user_id; ?>"><?php //echo $row->user_stat_description; ?>6</td> 
-                            </tr>
-                            <?php
-                                //}
-                            ?>
-                        </tbody>
-                    </table> 
                 </div>   
             </div>
           </div>
         </div>   
     </div> 
+    
+    <div class="modal fade" id="deleteOrderNoItemDetail" tabindex="-1" role="dialog" aria-labelledby="deleteUser" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form id="purchase_detail_form" method="POST">
+                <?php echo form_input($text_order_no_details_item,''); ?>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="delete_close" class="btn btn-default" data-dismiss="modal">No</button>
+            <button type="button" id="deleting" class="btn btn-primary">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     </body>
 </html>

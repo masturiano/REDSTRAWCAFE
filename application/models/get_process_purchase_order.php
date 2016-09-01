@@ -111,6 +111,21 @@ class Get_process_purchase_order extends CI_Model {
         return $query = $this->db->query($query_item_description);
     } 
     
+    # CHECK ORDER NO DETAILS
+    function check_order_no_details_item($order_no,$item_no){
+        $query_order_no_details_item = "
+            select 
+                * 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+                and item_id = {$item_no}
+        ";
+        return $query = $this->db->query($query_order_no_details_item);
+    }
+    
+    
     # SAVE NEW HEADER
     function add_new_detail($data){
         return $this->db->insert("tbl_purchase_order_details", $data);
@@ -136,37 +151,51 @@ class Get_process_purchase_order extends CI_Model {
     }
     
     # GET ITEM DESCRIPTION
-    function get_item_details($item_description,$order_no)
-    {
-        $result_buyer_price = $this->get_buyer_price($order_no);
-        if ($result_buyer_price->num_rows() > 0){
-           $row = $result_buyer_price->row();
+    function get_item_details($order_no)
+    {         
+        if($order_no != '')
+        {
+            $filter_order_no = "where a.purchase_order_no = {$order_no}";    
         }
-        else{
-           $row = "0"; 
-        }         
+        else
+        {
+            $filter_order_no = "where a.purchase_order_no = ''";
+        }
         $query_item_description = "
             select 
                 a.item_id,
-                a.group_code,
-                b.group_name,
-                a.description,
-                a.packaging,
+                b.description,
+                b.packaging,
+                c.group_name,
                 a.unit_price,
-                a.{$row->buyer} as buyer_price,
-                a.no_of_items,
-                a.lower_limit,
-                a.date_enter,
-                a.date_update
-            from 
-                tbl_items a
-            inner join
-                tbl_item_group b
-                on a.group_code = b.group_code
-            where
-                a.description like '%{$item_description}%'
+                a.buyer_price,
+                a.added_price,
+                a.input_no_of_items
+            from
+                tbl_purchase_order_details a
+            left join
+                tbl_items b on a.item_id = b.item_id
+            left JOIN
+                tbl_item_group c on b.group_code = c.group_code
+            {$filter_order_no}
+            order by 
+                b.description
         ";
         $query = $this->db->query($query_item_description);
         return $query->result();
     } 
+    
+    # DELETE ORDER NO ITEM DETAILS
+    function delete_order_no_details_item($order_no,$item_no)
+    {
+        $query = "
+            delete 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+                and item_id = {$item_no}
+        ";
+        $this->db->query($query);
+    }
 }

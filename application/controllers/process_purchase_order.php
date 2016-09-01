@@ -35,7 +35,7 @@ class Process_purchase_order extends CI_Controller {
         $data['module_name']  = "Purchase Order";   
 
         # MODEL
-        //$this->load->model('get_process_add_stock'); 
+        $this->load->model('get_process_purchase_order');  
          
         # FORM BUYER
         $data['price_option'] = array(
@@ -210,7 +210,11 @@ class Process_purchase_order extends CI_Controller {
             'size' => '50',                              
             'style' => 'width:100%',
             'class' => 'form-control'
-        );                     
+        );       
+        
+ 
+        # GET ORDER DETAILS
+        //$data['result_order_detail'] = $this->get_process_purchase_order->get_item_details($this->input->post('post_purchase_order_no'));
         
         # VIEW
         $this->load->view('view_purchase_order',$data); 
@@ -298,6 +302,21 @@ class Process_purchase_order extends CI_Controller {
         echo json_encode($arrResult);    
     }
     
+    function get_order_no_details_item(){
+        # MODEL
+        $this->load->model('get_process_purchase_order'); 
+        
+        # GET CURRENT DATE
+        $result_order_no_details_item = $this->get_process_purchase_order->check_order_no_details_item($this->input->post('text_order_no_detail'),$this->input->post('text_item_id'));   
+        
+        if ($result_order_no_details_item->num_rows() > 0){
+           echo "1";
+        }
+        else{
+           echo "0";
+        } 
+    }
+    
     function saving_details(){
         # MODEL
         $this->load->model('get_process_purchase_order'); 
@@ -344,11 +363,138 @@ class Process_purchase_order extends CI_Controller {
         echo "Details has been save";
     }
     
-    function view_details($post_purchase_order_no){
+    function view_details(){
         # MODEL
         $this->load->model('get_process_purchase_order'); 
         
-        # GET GROUP CODE
-        $data['result_order_detail'] = $this->get_process_purchase_order->get_user_group($post_purchase_order_no); 
+        # GET ORDER NUMBER DETAILS
+        $result_order_detail = $this->get_process_purchase_order->get_item_details($this->input->post('post_purchase_order_no'));
+
+        ?>
+        <script type="text/javascript">
+            $(function()
+            {
+                function init()
+                {
+                    $("#div_disp_data").show();
+                    $("#grid-data").bootgrid({
+                        formatters: {
+                            "link": function(column, row)
+                            {
+                                return "<?php echo base_url('process_purchase_order/view_details');?>" + column.id + ": " + row.id + "</a>";
+                            }
+                        },
+                        rowCount: [10, 50, 75, -1]
+                    }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+                        var value = $("#grid-data").bootgrid("getSelectedRows");
+                        if(value.length == 0){
+                            $('#btn_delete').attr('disabled','disabled'); 
+                        }
+                        else if(value.length == 1){
+                            $('#btn_delete').removeAttr('disabled'); 
+                        }
+                        else{    
+                            $('#btn_delete').attr('disabled','disabled'); 
+                        }                                                    
+                    }).on("deselected.rs.jquery.bootgrid", function (e, rows){
+                        var value = $("#grid-data").bootgrid("getSelectedRows");
+                        if(value.length == 0){
+                            $('#btn_delete').attr('disabled','disabled'); 
+                        }
+                        else if(value.length == 1){
+                            $('#btn_delete').removeAttr('disabled'); 
+                        }
+                        else{    
+                            $('#btn_delete').attr('disabled','disabled'); 
+                        }       
+                    })  
+                }
+                
+                init();    
+                
+                $("#btn_delete").on("click", function ()
+                {                                                 
+                    var value = $("#grid-data").bootgrid("getSelectedRows");
+                    // SELECT TABLE ROW         
+                    $.ajax({           
+                        url: "<?php echo base_url('process_purchase_order/delete_order_no_details_item/');?>",
+                        type: "POST",
+                        data: "post_id="+value,
+                        success: function(data){
+                            $('#deleteOrderNoItemDetail').modal('show');
+                            $('#deleteOrderNoItemDetail .modal-body').html(data); 
+                            $('#deleting').click( function (e) {
+                                e.stopImmediatePropagation(); 
+                                $.ajax({
+                                    url: "<?php echo base_url('process_purchase_order/deleting_order_no_details_item');?>",
+                                    type: "POST",
+                                    data: "post_id="+value+"&post_order_no="+"<?=$this->input->post('post_purchase_order_no');?>",
+                                    success: function(){
+                                        bootbox.alert("Selected item successfully deleted!", function() {
+                                            $('#btn_delete').attr('disabled','disabled'); 
+                                        });
+                                    }         
+                                });   
+                            });       
+                        }         
+                    });  
+                });
+                
+            });
+        </script>
+        <?php 
+            echo $this->input->post('post_purchase_order_no');
+            echo "</br>";
+        ?>
+        <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
+        <table id="grid-data" class="table table-condensed table-hover table-striped"
+        data-selection="true" 
+        data-multi-select="false" 
+        data-row-select="true" 
+        data-keep-selection="true">
+            <thead>
+                <tr class="clickable-row"> 
+                    <!-- data-column-id="sender" data-column-id="received" -->
+                    <th data-column-id="id" data-type="numeric" data-identifier="true" data-order="asc" data-visible="false" >Item Id</th>
+                    <th data-column-id="description">Description</th>
+                    <th data-column-id="packaging">Packaging</th>
+                    <th data-column-id="group_name">Group Name</th>
+                    <th data-column-id="buyer_price">Unit Price</th>
+                    <th data-column-id="added_price">Added Price</th>
+                    <th data-column-id="input_no_of_item">No of items</th>  
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    foreach($result_order_detail as $row){
+                ?>
+                <tr>
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->item_id; ?></td>
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->description; ?></td>
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->packaging; ?></td> 
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->group_name; ?></td> 
+                    <td id="<?php echo $row->item_id; ?>"><?php echo number_format($row->unit_price,2,".",","); ?></td> 
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->buyer_price;; ?></td>
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->added_price; ?></td> 
+                    <td id="<?php echo $row->item_id; ?>"><?php echo $row->input_no_of_items; ?></td> 
+                </tr>
+                <?php
+                    }
+                ?>
+            </tbody>
+        </table> 
+        <?php
+    }
+    
+    function delete_order_no_details_item(){
+        ?>
+        Are you sure you want to delete selected item? 
+        <?php    
+    }
+    
+    public function deleting_order_no_details_item(){  
+        # MODEL
+        $this->load->model('get_process_purchase_order');
+        $this->get_process_purchase_order->delete_order_no_details_item($_POST['post_order_no'],$_POST['post_id']); 
     }
 }
