@@ -24,116 +24,7 @@
                     }                
                });  
             setTimeout("checkSession()",10000); 
-        } 
-        
-        // BOOT GRID
-        // Refer to http://jquery-bootgrid.com/Documentation for methods, events and settings
-        // load gird on page\e load...
-        
-        //selection:true,
-        //multiSelect: true,
-        //rowSelect : true,   
-        $(function()
-        {
-            function init()
-            {
-                $("#div_disp_data").show();
-                $("#grid-data").bootgrid({
-                    formatters: {
-                        "link": function(column, row)
-                        {
-                            return "<?php echo base_url('systema/user_maintenance');?>" + column.id + ": " + row.id + "</a>";
-                        }
-                    },
-                    rowCount: [10, 50, 75, -1]
-                }).on("selected.rs.jquery.bootgrid", function (e, rows) {
-                    var value = $("#grid-data").bootgrid("getSelectedRows");
-                    if(value.length == 0){
-                        $('#btn_edit').attr('disabled','disabled'); 
-                        $('#btn_delete').attr('disabled','disabled'); 
-                    }
-                    else if(value.length == 1){
-                        $('#btn_edit').removeAttr('disabled');
-                        $('#btn_delete').removeAttr('disabled'); 
-                    }
-                    else{    
-                        $('#btn_edit').attr('disabled','disabled'); 
-                        $('#btn_delete').attr('disabled','disabled'); 
-                    }                                                    
-                }).on("deselected.rs.jquery.bootgrid", function (e, rows){
-                    var value = $("#grid-data").bootgrid("getSelectedRows");
-                    if(value.length == 0){
-                        $('#btn_edit').attr('disabled','disabled'); 
-                        $('#btn_delete').attr('disabled','disabled'); 
-                    }
-                    else if(value.length == 1){
-                        $('#btn_edit').removeAttr('disabled');
-                        $('#btn_delete').removeAttr('disabled'); 
-                    }
-                    else{    
-                        $('#btn_edit').attr('disabled','disabled'); 
-                        $('#btn_delete').attr('disabled','disabled'); 
-                    }       
-                })  
-            }
-            
-            init();    
-            
-            $("#btn_add").on("click", function ()
-            {
-                var value = $("#grid-data").bootgrid("getSelectedRows");
-                // SELECT TABLE ROW         
-                $.ajax({           
-                    url: "<?php echo base_url('systema/user_maintenance');?>",
-                    type: "POST",
-                    data: "post_id="+value,
-                    success: function(){
-                                             
-                        $("#div_disp_data").show();  
-                        $('#btn_encode').removeAttr('disabled'); 
-                        $('#div_encode_sawt').modal('hide');   
-                        add_user(value)     
-                    }         
-                });  
-            }); 
-            
-            $("#btn_edit").on("click", function ()
-            {
-                var value = $("#grid-data").bootgrid("getSelectedRows");
-                // SELECT TABLE ROW         
-                $.ajax({           
-                    url: "<?php echo base_url('systema/user_maintenance');?>",
-                    type: "POST",
-                    data: "post_id="+value,
-                    success: function(){
-                                             
-                        $("#div_disp_data").show();  
-                        $('#btn_encode').removeAttr('disabled'); 
-                        $('#div_encode_sawt').modal('hide');   
-                        edit_user(value)     
-                    }         
-                });  
-            });
-            
-            $("#btn_delete").on("click", function ()
-            {
-                var value = $("#grid-data").bootgrid("getSelectedRows");
-                // SELECT TABLE ROW         
-                $.ajax({           
-                    url: "<?php echo base_url('systema/user_maintenance');?>",
-                    type: "POST",
-                    data: "post_id="+value,
-                    success: function(){
-                                             
-                        $("#div_disp_data").show();  
-                        $('#btn_encode').removeAttr('disabled'); 
-                        $('#div_encode_sawt').modal('hide');   
-                        delete_user(value)     
-                    }         
-                });  
-            });
-            
-        });  
+        }  
         
         function buyerSelect(){
             if($('#dropdown_buyer').val() == 'select'){
@@ -154,12 +45,17 @@
                 backdrop: 'static',
                 keyboard: false
             }); 
+            // CLOSE THE MODAL REFRESH THE PAGE
+            $('#save_close').click( function (e) {
+                document.location.reload();
+            }); 
             // END AVOID CLOSING THE MODAL
             $.ajax({
                 url: "<?php echo base_url('process_purchase_order/get_order_no');?>",
                 type: "POST",
                 data: "post_buyer="+value,
                 success: function(data){  
+                    order_no_display = '';
                     order_no = data.length; 
                     order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data);
                     order_no_display = order_no_add_zero.val().slice(order_no);
@@ -226,6 +122,10 @@
             $('#create_details').modal({
                 backdrop: 'static',
                 keyboard: false
+            });
+            // CLOSE THE MODAL REFRESH THE PAGE
+            $('#save_details_close').click( function (e) {
+                document.location.reload();
             });
             // END AVOID CLOSING THE MODAL
             $('#text_order_no_detail').val(order_no_display);
@@ -466,6 +366,7 @@
             /* new custom width */
             width: 950px;
         }
+        .close {display: none;}
     </style>
                                                         
     </head>

@@ -410,43 +410,50 @@ class Process_purchase_order extends CI_Controller {
                     })  
                 }
                 
-                init();    
+                init();
                 
-                $("#btn_delete").on("click", function ()
-                {                                                 
+                $("#btn_delete").on("click", function (e)
+                {                               
+                    e.stopImmediatePropagation();                
                     var value = $("#grid-data").bootgrid("getSelectedRows");
                     // SELECT TABLE ROW         
                     $.ajax({           
                         url: "<?php echo base_url('process_purchase_order/delete_order_no_details_item/');?>",
                         type: "POST",
-                        data: "post_id="+value,
                         success: function(data){
                             $('#deleteOrderNoItemDetail').modal('show');
                             $('#deleteOrderNoItemDetail .modal-body').html(data); 
                             $('#deleting').click( function (e) {
-                                e.stopImmediatePropagation(); 
+                                e.stopImmediatePropagation();
+                                var value = $("#grid-data").bootgrid("getSelectedRows");
                                 $.ajax({
                                     url: "<?php echo base_url('process_purchase_order/deleting_order_no_details_item');?>",
                                     type: "POST",
                                     data: "post_id="+value+"&post_order_no="+"<?=$this->input->post('post_purchase_order_no');?>",
                                     success: function(){
+                                        alert(value);
                                         bootbox.alert("Selected item successfully deleted!", function() {
-                                            $('#btn_delete').attr('disabled','disabled'); 
                                         });
+                                        $('#deleteOrderNoItemDetail').modal('hide');
+                                        $('#btn_delete').attr('disabled','disabled');
+                                        data_order_no = "<?=$this->input->post('post_purchase_order_no');?>";
+                                        order_no = data_order_no.length; 
+                                        order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data_order_no);
+                                        order_no_display = order_no_add_zero.val().slice(order_no);
+                                        viewDetails(order_no_display);
+                                        // Remove it (later)
                                     }         
                                 });   
                             });       
                         }         
                     });  
-                });
-                
+                });    
             });
         </script>
         <?php 
             echo $this->input->post('post_purchase_order_no');
             echo "</br>";
         ?>
-        <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
         <table id="grid-data" class="table table-condensed table-hover table-striped"
         data-selection="true" 
         data-multi-select="false" 
@@ -483,6 +490,10 @@ class Process_purchase_order extends CI_Controller {
                 ?>
             </tbody>
         </table> 
+         <div class="modal-footer">
+            <button type="button" id="save_details_close" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
+         </div>
         <?php
     }
     
