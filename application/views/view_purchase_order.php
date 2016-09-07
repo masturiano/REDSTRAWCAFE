@@ -219,8 +219,9 @@
                                 type: "POST",
                                 data: $('#purchase_detail_form').serialize(),
                                 success: function(){ 
-                                    alert('Details Save'); 
-                                    clearTextfield();
+                                    bootbox.alert("Details successfully saved!", function() {  
+                                        clearTextfield();
+                                    });    
                                 }         
                             });     
                         }

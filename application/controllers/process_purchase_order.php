@@ -431,7 +431,6 @@ class Process_purchase_order extends CI_Controller {
                                     type: "POST",
                                     data: "post_id="+value+"&post_order_no="+"<?=$this->input->post('post_purchase_order_no');?>",
                                     success: function(){
-                                        alert(value);
                                         bootbox.alert("Selected item successfully deleted!", function() {
                                         });
                                         $('#deleteOrderNoItemDetail').modal('hide');
@@ -441,7 +440,6 @@ class Process_purchase_order extends CI_Controller {
                                         order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data_order_no);
                                         order_no_display = order_no_add_zero.val().slice(order_no);
                                         viewDetails(order_no_display);
-                                        // Remove it (later)
                                     }         
                                 });   
                             });       
@@ -506,6 +504,21 @@ class Process_purchase_order extends CI_Controller {
     public function deleting_order_no_details_item(){  
         # MODEL
         $this->load->model('get_process_purchase_order');
-        $this->get_process_purchase_order->delete_order_no_details_item($_POST['post_order_no'],$_POST['post_id']); 
+        if($this->get_process_purchase_order->delete_order_no_details_item($this->input->post('post_order_no'),$this->input->post('post_id'))){
+            $result_total_details = $this->get_process_purchase_order->get_total_detail($this->input->post('post_order_no'));
+            if ($result_total_details->num_rows() > 0)
+            {
+                $row_total_details = $result_total_details->row();
+                $edit_header = array(
+                    "amount" => $row_total_details->total_added_price,
+                    "date_update" => $row->current_date_time
+                );
+               $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('post_order_no'));
+            }
+            else{
+                echo "error";
+                $row_total_details = "0"; 
+            }   
+        }
     }
 }

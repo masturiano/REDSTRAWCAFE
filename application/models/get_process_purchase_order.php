@@ -196,6 +196,6 @@ class Get_process_purchase_order extends CI_Model {
                 purchase_order_no = {$order_no}
                 and item_id = {$item_no}
         ";
-        $this->db->query($query);
+        return $this->db->query($query);
     }
 }
