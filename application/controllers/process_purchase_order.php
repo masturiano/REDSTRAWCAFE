@@ -359,6 +359,21 @@ class Process_purchase_order extends CI_Controller {
                 echo "error";
                 $row_total_details = "0"; 
             }
+            # GET ORDER NUMBER DETAILS
+            $result_order_detail = $this->get_process_purchase_order->get_item_details($this->input->post('text_order_no_detail'));
+            foreach($result_order_detail as $row_details){
+                $result_item_qty = $this->get_process_purchase_order->get_item_quantity($row_details->item_id);
+                if ($result_item_qty->num_rows() > 0)
+                {
+                    $row_final_qty = $result_item_qty->row();
+                    $final_qty = $row_final_qty->no_of_items - $row_details->input_no_of_items;
+                    $edit_item_qty = array(
+                        "no_of_items" => $final_qty,
+                        "date_update" => $row->current_date_time
+                    );
+                    $this->get_process_purchase_order->edit_item_quantity($edit_item_qty,$row_details->item_id);
+                }
+            }
         }
         echo "Details has been save";
     }
@@ -464,7 +479,7 @@ class Process_purchase_order extends CI_Controller {
                     <th data-column-id="description">Description</th>
                     <th data-column-id="packaging">Packaging</th>
                     <th data-column-id="group_name">Group Name</th>
-                    <th data-column-id="buyer_price">Unit Price</th>
+                    <th data-column-id="buyer_price">Price</th>
                     <th data-column-id="added_price">Added Price</th>
                     <th data-column-id="input_no_of_item">No of items</th>  
                 </tr>
@@ -478,7 +493,6 @@ class Process_purchase_order extends CI_Controller {
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->description; ?></td>
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->packaging; ?></td> 
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->group_name; ?></td> 
-                    <td id="<?php echo $row->item_id; ?>"><?php echo number_format($row->unit_price,2,".",","); ?></td> 
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->buyer_price;; ?></td>
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->added_price; ?></td> 
                     <td id="<?php echo $row->item_id; ?>"><?php echo $row->input_no_of_items; ?></td> 
@@ -504,21 +518,48 @@ class Process_purchase_order extends CI_Controller {
     public function deleting_order_no_details_item(){  
         # MODEL
         $this->load->model('get_process_purchase_order');
-        if($this->get_process_purchase_order->delete_order_no_details_item($this->input->post('post_order_no'),$this->input->post('post_id'))){
-            $result_total_details = $this->get_process_purchase_order->get_total_detail($this->input->post('post_order_no'));
-            if ($result_total_details->num_rows() > 0)
+        
+        # GET CURRENT DATE
+        $result_current_date_time = $this->get_process_purchase_order->get_server_current_date_time();   
+        if ($result_current_date_time->num_rows() > 0){
+           $row = $result_current_date_time->row();
+        }
+        else{
+           $row = "0"; 
+        }
+        
+        # UPDATE TABLE ITEMS QUANTITY PER ITEM
+        $result_item_qty = $this->get_process_purchase_order->get_item_quantity($this->input->post('post_id'));
+        if ($result_item_qty->num_rows() > 0)
+        {
+            $row_final_qty = $result_item_qty->row();
+            $result_item_qty_per_purchase_order = $this->get_process_purchase_order->get_item_quantity_order_no($this->input->post('post_order_no'),$this->input->post('post_id'));
+            if ($result_item_qty_per_purchase_order->num_rows() > 0)
             {
-                $row_total_details = $result_total_details->row();
-                $edit_header = array(
-                    "amount" => $row_total_details->total_added_price,
+                $row_item_qty_per_purchase_order = $result_item_qty_per_purchase_order->row();
+                $final_qty = $row_item_qty_per_purchase_order->input_no_of_items + $row_final_qty->no_of_items;
+                $edit_item_qty = array(
+                    "no_of_items" => $final_qty,
                     "date_update" => $row->current_date_time
                 );
-               $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('post_order_no'));
-            }
-            else{
-                echo "error";
-                $row_total_details = "0"; 
-            }   
+                if($this->get_process_purchase_order->edit_item_quantity($edit_item_qty,$this->input->post('post_id'))){
+                    if($this->get_process_purchase_order->delete_order_no_details_item($this->input->post('post_order_no'),$this->input->post('post_id'))){
+                        $result_total_details = $this->get_process_purchase_order->get_total_detail($this->input->post('post_order_no'));
+                        if ($result_total_details->num_rows() > 0)
+                        {
+                            $row_total_details = $result_total_details->row();
+                            $edit_header = array(
+                                "amount" => $row_total_details->total_added_price,
+                                "date_update" => $row->current_date_time
+                            );
+                           $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('post_order_no'));
+                        }
+                        else{
+                            echo "error";
+                        }   
+                    }    
+                }
+            } 
         }
-    }
+    }                     
 }

@@ -198,4 +198,36 @@ class Get_process_purchase_order extends CI_Model {
         ";
         return $this->db->query($query);
     }
+    
+    # GET ITEM QUANTITY
+    function get_item_quantity($item_id)
+    {
+        $item_qty = "
+            select 
+                no_of_items 
+            from 
+                tbl_items where item_id = {$item_id}
+        ";
+        return $query = $this->db->query($item_qty);
+    }
+    
+    # EDIT ITEM QUANTITY
+    function edit_item_quantity($data,$item_id){
+        return $this->db->update("tbl_items", $data, "item_id = {$item_id}");
+    }
+    
+    # GET INPUTED NO OF ITEMS PER PURCHASE ORDER PER ITEM ID
+    function get_item_quantity_order_no($purchase_order_no,$item_id)
+    {
+        $input_item_quantity = "
+            select 
+                input_no_of_items 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$purchase_order_no}
+                and item_id = {$item_id}
+        ";
+        return $query = $this->db->query($input_item_quantity);
+    }
 }
