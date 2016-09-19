@@ -18,7 +18,7 @@ class Pdf extends FPDF
          9,     // margin footer
          'L');  // L - landscape, P - portrait
       */
-    function __construct($orientation='L', $unit='mm', $size='Legal')
+    function __construct($orientation='P', $unit='mm', $size='Letter')
     {
         // Call parent constructor
         parent::__construct($orientation,$unit,$size);

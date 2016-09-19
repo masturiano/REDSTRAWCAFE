@@ -230,4 +230,31 @@ class Get_process_purchase_order extends CI_Model {
         ";
         return $query = $this->db->query($input_item_quantity);
     }
+    
+    function get_purchase_order_no($order_no)
+    {
+        $input_item_quantity = "
+            select 
+                input_no_of_items 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query = $this->db->query($input_item_quantity);
+    }
+    
+    # GET HEADER PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    function get_header_purchase_order_no_pdf($order_no)
+    {
+        $query_select = "
+            select 
+                * 
+            from  
+                tbl_purchase_order_header
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
 }
