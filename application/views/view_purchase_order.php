@@ -228,12 +228,6 @@
                     }         
                 });  
             });
-            //$('#editUser').modal('hide');  
-            //bootbox.alert("Item successfully edited!", function() {
-            //    $('#btn_edit').attr('disabled','disabled');
-            //    $('#btn_delete').attr('disabled','disabled'); 
-            //    document.location.reload();
-            //});
         }
         
         function viewDetails(order_no_display){

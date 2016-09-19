@@ -360,19 +360,17 @@ class Process_purchase_order extends CI_Controller {
                 $row_total_details = "0"; 
             }
             # GET ORDER NUMBER DETAILS
-            $result_order_detail = $this->get_process_purchase_order->get_item_details($this->input->post('text_order_no_detail'));
-            foreach($result_order_detail as $row_details){
-                $result_item_qty = $this->get_process_purchase_order->get_item_quantity($row_details->item_id);
-                if ($result_item_qty->num_rows() > 0)
-                {
-                    $row_final_qty = $result_item_qty->row();
-                    $final_qty = $row_final_qty->no_of_items - $row_details->input_no_of_items;
-                    $edit_item_qty = array(
-                        "no_of_items" => $final_qty,
-                        "date_update" => $row->current_date_time
-                    );
-                    $this->get_process_purchase_order->edit_item_quantity($edit_item_qty,$row_details->item_id);
-                }
+            $result_item_qty = $this->get_process_purchase_order->get_item_quantity($this->input->post('text_item_id'));
+            if ($result_item_qty->num_rows() > 0)
+            {
+                $row_final_qty = $result_item_qty->row();
+
+                $final_qty = $row_final_qty->no_of_items - $this->input->post('text_input_no_of_items');
+                $edit_item_qty = array(
+                    "no_of_items" => $final_qty,
+                    "date_update" => $row->current_date_time
+                );
+                $this->get_process_purchase_order->edit_item_quantity($edit_item_qty,$this->input->post('text_item_id'));
             }
         }
         echo "Details has been save";
@@ -460,11 +458,33 @@ class Process_purchase_order extends CI_Controller {
                             });       
                         }         
                     });  
-                });    
+                }); 
+                $("#btn_print_purchase_order").on("click", function (e)
+                {               
+                    e.stopImmediatePropagation();                
+                    data_order_no = "<?=$this->input->post('post_purchase_order_no');?>";
+                    print_purchase_order(data_order_no);
+                });  
+                
+                // PRINT TRANSMITTAL
+                function print_purchase_order(post_purchase_order_no){
+                    $.ajax({
+                        url: "<?php echo base_url('process_purchase_order/generate_purchase_order_pdf');?>",
+                        type: "POST",
+                        data: "post_order_no="+post_purchase_order_no,
+                        success: function(data){
+                            eval(data);
+                            bootbox.alert("Print transmittal success!", function() {  
+                                //$('#div_transmit_confirm').modal('hide'); 
+                                //document.location.reload();
+                            });       
+                        }         
+                    });       
+                }  
             });
         </script>
         <?php 
-            echo $this->input->post('post_purchase_order_no');
+            echo "<b>Order No.:</b> ".$this->input->post('post_purchase_order_no');
             echo "</br>";
         ?>
         <table id="grid-data" class="table table-condensed table-hover table-striped"
@@ -503,6 +523,7 @@ class Process_purchase_order extends CI_Controller {
             </tbody>
         </table> 
          <div class="modal-footer">
+            <button type="button" id="btn_print_purchase_order" class="btn btn-default" data-dismiss="modal">Print</button>
             <button type="button" id="save_details_close" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" id="btn_delete" class="btn btn-danger" disabled="disabled">Delete</button>
          </div>
@@ -561,5 +582,18 @@ class Process_purchase_order extends CI_Controller {
                 }
             } 
         }
-    }                     
+    }   
+    
+    function generate_purchase_order_pdf()
+    {   
+        # TITLE
+        $data['title']  = "REDSTRAW"; 
+        
+        # MODEL
+        $this->load->model('get_process_purchase_order');
+        
+        $order_no = $this->input->post('post_order_no');
+        
+        echo "window.open('".base_url()."process_purchase_order_pdf/index/".str_replace(',','-',$order_no)."');";                  
+    }                  
 }

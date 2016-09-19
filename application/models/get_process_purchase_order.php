@@ -244,7 +244,7 @@ class Get_process_purchase_order extends CI_Model {
         return $query = $this->db->query($input_item_quantity);
     }
     
-    # GET HEADER PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    # GET HEADER ORDER NO PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
     function get_header_purchase_order_no_pdf($order_no)
     {
         $query_select = "
@@ -253,7 +253,23 @@ class Get_process_purchase_order extends CI_Model {
             from  
                 tbl_purchase_order_header
             where 
-                purchase_order_no = {$order_no}
+                purchase_order_no like '%{$order_no}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
+    
+    # GET HEADER BRANCH PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    function get_header_branch_purchase_order_no_pdf($order_no)
+    {
+        $query_select = "
+            select 
+                b.* 
+            from 
+                tbl_purchase_order_header a
+            inner join 
+                tbl_branch b on a.branch_id = b.branch_id
+            where 
+                a.purchase_order_no = {$order_no}
         ";
         return $query_execute = $this->db->query($query_select);
     }
