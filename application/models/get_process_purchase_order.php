@@ -273,4 +273,46 @@ class Get_process_purchase_order extends CI_Model {
         ";
         return $query_execute = $this->db->query($query_select);
     }
+    
+    # GET FOOTER TOTAL INPUT NUMBER OF ITEMS PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    function get_footer_total_input_no_of_items_order_no_pdf($order_no)
+    {
+        $query_select = "
+            select 
+                sum(input_no_of_items) as input_no_of_items 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
+    
+    # GET FOOTER TOTAL BUYER PRICE PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    function get_footer_total_buyer_price_order_no_pdf($order_no)
+    {
+        $query_select = "
+            select 
+                sum(buyer_price) as buyer_price 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
+    
+    # GET FOOTER TOTAL ADDED PRICE PER ORDER NUMBER FOR PURCHASE ORDER PRINTOUT
+    function get_footer_total_added_price_order_no_pdf($order_no)
+    {
+        $query_select = "
+            select 
+                sum(added_price) as added_price 
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
 }

@@ -26,6 +26,27 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
             $header_branch_row = $header_branch->row();
         }
         
+        # GET FOOTER TOTAL INPUT NUMBER OF ITEMS
+        $footer_total_input_no_of_items = $this->get_process_purchase_order->get_footer_total_input_no_of_items_order_no_pdf($order_no);
+        if ($footer_total_input_no_of_items->num_rows() > 0)
+        {
+            $footer_total_input_no_of_items_row = $footer_total_input_no_of_items->row();
+        }
+        
+        # GET FOOTER TOTAL BUYER PRICE
+        $footer_total_buyer_price = $this->get_process_purchase_order->get_footer_total_buyer_price_order_no_pdf($order_no);
+        if ($footer_total_buyer_price->num_rows() > 0)
+        {
+            $footer_total_buyer_price_row = $footer_total_buyer_price->row();
+        }
+        
+        # GET FOOTER TOTAL ADDED PRICE
+        $footer_total_added_price = $this->get_process_purchase_order->get_footer_total_added_price_order_no_pdf($order_no);
+        if ($footer_total_added_price->num_rows() > 0)
+        {
+            $footer_total_added_price_row = $footer_total_added_price->row();
+        }
+        
         # GET DETAILS
         $details = $this->get_process_purchase_order->get_item_details($order_no);
         
@@ -37,9 +58,23 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         $this->pdf->Cell(0,4,'ORDER FORM',0,1,'R');
         $this->pdf->Cell(0,4,'RedStraw Cafe',0,1,'L');
         $this->pdf->Cell(0,4,"The frappe that you can't resist...",0,1,'L');
+        $this->pdf->Cell(0,4,'',0,1,'L');
+        
+        $this->pdf->SetFont('Arial','',8);
+        $this->pdf->Cell(100,4,'Unit 2 G/F Padilla Bldg. 2136 CM Recto Ave.',0,1,'L');
+        $this->pdf->Cell(100,4,'Zone 040 Brgy. 390 Quiapo Manila',0,1,'L');
+        $this->pdf->SetFont('Arial','BI',8);
+        $this->pdf->Cell(15,4,'Mobile # :',0,0,'L');
+        $this->pdf->SetFont('Arial','',8);
+        $this->pdf->Cell(0,4,'09061677482',0,1,'L');
+        $this->pdf->SetFont('Arial','BI',8);
+        $this->pdf->Cell(10,4,'Tel # :',0,0,'L');
+        $this->pdf->SetFont('Arial','',8);
+        $this->pdf->Cell(0,4,'2421353',0,1,'L');
+        $this->pdf->Cell(0,4,'',0,1,'L');
         
         $this->pdf->SetFont('Arial','BI',10);
-        $this->pdf->Cell(148,4,'DATE # : ',0,0,'R');
+        $this->pdf->Cell(148,4,'DATE : ',0,0,'R');
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(0,4,date('F d, Y',strtotime($header_order_no_row->date_enter)),0,1,'R');
         $this->pdf->SetFont('Arial','BI',10);
@@ -79,19 +114,18 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         # BODY 
         // TABLE HEADER
         $this->pdf->SetFont('Arial','B',8); // SET FONT
-        $this->pdf->Cell(70,8,'DESCRIPTION','BTLR',0,'L');
+        $this->pdf->Cell(104,8,'DESCRIPTION','BTLR',0,'L');
         $this->pdf->Cell(30,8,'NO. OF ITEMS','BTLR',0,'L');
         $this->pdf->Cell(30,8,'UNIT PRICE','BTLR',0,'L');
         $this->pdf->Cell(30,8,'AMOUNT','BTLR',1,'L');
             
-        $this->pdf->SetFont('Arial','',8); // SET FONT
         // TABLE DETAILS
-        
+        $this->pdf->SetFont('Arial','',8); // SET FONT
         foreach($details as $details_val) {
-            $this->pdf->Cell(70,6,$details_val->description,'BTLR',0,'L');
+            $this->pdf->Cell(104,6,$details_val->description,'BTLR',0,'L');
             $this->pdf->Cell(30,6,$details_val->input_no_of_items,'BTLR',0,'L');
-            $this->pdf->Cell(30,6,$details_val->unit_price,'BTLR',0,'L');
-            $this->pdf->Cell(30,6,$details_val->added_price,'BTLR',1,'L');
+            $this->pdf->Cell(30,6,number_format($details_val->buyer_price,2),'BTLR',0,'L');
+            $this->pdf->Cell(30,6,number_format($details_val->added_price,2),'BTLR',1,'L');
             //$this->pdf->Cell(30,6,date('Y-m-d',strtotime($details_val->RECEIPT_DATE)),'BTLR',0,'C');
             //$this->pdf->Cell(30,6,$details_val->ACCOUNT_NUMBER,'BTLR',0,'L');
             //$this->pdf->Cell(50,6,substr($val->ACCOUNT_NAME,0,30),'BTLR',0,'L');
@@ -103,6 +137,18 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
             //$this->pdf->Cell(30,6,$details_val->TAX_BASE,'BTLR',0,'R');
             //$this->pdf->Cell(30,6,date('Y-m-d',strtotime($details_val->GL_DATE_SAWT)),'BTLR',1,'C');
         } 
+        
+        // TABLE FOOTER
+        $this->pdf->SetFont('Arial','B',8); // SET FONT
+        $this->pdf->Cell(104,8,'TOTAL','',0,'L');
+        $this->pdf->Cell(30,8,$footer_total_input_no_of_items_row->input_no_of_items,'',0,'L');
+        $this->pdf->Cell(30,8,number_format($footer_total_buyer_price_row->buyer_price,2),'',0,'L');
+        $this->pdf->Cell(30,8,number_format($footer_total_added_price_row->added_price,2),'',1,'L');
+        $this->pdf->Cell(0,4,'',0,10,'L');
+        
+        $this->pdf->SetFont('Arial','BI',8);
+        $this->pdf->Cell(190,4,'If you have any question about this order form please contact',0,1,'C');
+        $this->pdf->Cell(190,4,'242-1353 / Email : redstrawcafe@gmail.com',0,1,'C');
         
         # FOOTER
         $curr_date = $this->get_process_purchase_order->get_server_current_date_time();
@@ -129,7 +175,7 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         */
         
         # FPDF FUNCTION
-        $this->pdf->Output('SAWT_Transmittal.pdf','D');    
+        $this->pdf->Output('redstraw_cafe_'.$order_no.'.pdf','D');    
         
     }  
 }   

@@ -476,7 +476,7 @@ class Process_purchase_order extends CI_Controller {
                             eval(data);
                             bootbox.alert("Print transmittal success!", function() {  
                                 //$('#div_transmit_confirm').modal('hide'); 
-                                //document.location.reload();
+                                document.location.reload();
                             });       
                         }         
                     });       
