@@ -589,3 +589,37 @@ MODAL HEADER COLOR
     font-size: 12px;
     color: #ffffff;
 }
+
+/*-------------------------
+DIV TABLE AVAILABLE STOCKS
+---------------------------*/
+table#table_available_stocks{
+    border: 0px solid #999;
+    background-color: transparent;
+    font-family: 'Exo', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    width: 47%;
+}
+
+table#table_available_stocks td.table_label{
+    width: 120px;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_available_stocks td.table_colon{
+    width: 10px;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_available_stocks td.table_data{
+    width: 10%;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+    margin-top:-2px;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+}

@@ -11,6 +11,24 @@ class Get_report extends CI_Model {
         return $query = $this->db->query($query_current_date);
     }
     
+    #########################( AVAILABLE STOCKS )#########################
+    
+    # GET ALL COMPANY
+    function get_item_group_name()
+    {
+        $query_select = "
+            select 
+                group_code,
+                group_name
+            from 
+                tbl_item_group
+            order by
+                group_name   
+        ";
+        $query_execute = $this->db->query($query_select);
+        return $query_execute->result();
+    }  
+    
     #########################( CANCELLED )#########################
     
     # GET NOT TRANSMIT

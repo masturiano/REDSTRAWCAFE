@@ -157,12 +157,10 @@ $session_user_level = $this->session->userdata('userLevel');
                     # 4 = ACCOUNTING
                     # 5 = CREDIT & COLLECTION
                     if(
-                        ($session_group_code == 4) || ($session_group_code == 5)
-                        && 
-                        ($session_user_level == 2)
+                        ($session_group_code == 1) || ($session_group_code == 2) || ($session_group_code == 3)
                     ){
                     ?>                  
-                    <li><a href="<? echo site_url('report/received'); ?>" class="homeIcon" title="Home"><span>Received</span></a></li>   
+                    <li><a href="<? echo site_url('report/available_stocks'); ?>" class="homeIcon" title="Home"><span>Available Stocke</span></a></li> 
                     <?php
                     }
                     ?>   
