@@ -13,7 +13,10 @@ class Get_report extends CI_Model {
     
     #########################( AVAILABLE STOCKS )#########################
     
-    # GET ALL COMPANY
+    /**
+    * Get all company for combo box
+    * 
+    */
     function get_item_group_name()
     {
         $query_select = "
@@ -27,7 +30,83 @@ class Get_report extends CI_Model {
         ";
         $query_execute = $this->db->query($query_select);
         return $query_execute->result();
-    }  
+    } 
+    
+    /**
+    * Excel report of all items with item group
+    * 
+    * @param integer $group_code  
+    */
+    function get_available_stocks($group_code)
+    {   
+        # FILTER PER ITEM GROUP
+        if($group_code == 0)
+        {
+            $filter_item_group = "";    
+        }
+        else
+        {
+            $filter_item_group = "where a.group_code = {$group_code}";    
+        }
+        
+        
+        $query_select = "
+            select 
+                a.item_id,
+                a.group_code,
+                b.group_name,
+                a.description,
+                a.packaging,
+                a.unit_price,
+                a.rel_price,
+                a.fran_price,
+                a.no_of_items,
+                a.lower_limit,
+                a.date_enter,
+                a.date_update
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+            {$filter_item_group}
+            order by
+                group_name asc,
+                description asc  
+        ";
+        $query_execute = $this->db->query($query_select);
+        return $query_execute->result();
+    }
+    
+    /**
+    * Get the total number of items
+    * 
+    * @param integer $group_code
+    */
+    function get_total_no_of_items($group_code)
+    {
+        # FILTER PER ITEM GROUP
+        if($group_code == 0)
+        {
+            $filter_item_group = "";    
+        }
+        else
+        {
+            $filter_item_group = "where a.group_code = {$group_code}";    
+        }
+        
+        $query_select = "
+            select 
+                sum(a.no_of_items) as no_of_items
+            from 
+                tbl_items a
+            inner join
+                tbl_item_group b
+                on a.group_code = b.group_code
+            {$filter_item_group}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    } 
     
     #########################( CANCELLED )#########################
     

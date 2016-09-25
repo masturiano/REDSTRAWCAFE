@@ -76,17 +76,7 @@
         
         // CLICK BUTTON PRINT EXCEL
         function printExcel()
-        {
-            if($('#cmb_item_group').val() == 0){
-                bootbox.alert("Please select item group!", function() {
-                    $('#cmb_item_group').css("border","red solid 1px");
-                });    
-                return false;
-            } 
-            else{
-                $('#cmb_item_group').css("border","lightgray solid 1px");    
-            }   
-                    
+        {     
             $.ajax
             ({
                 url: '<? echo site_url('report/generate_available_stocks_xls');?>',

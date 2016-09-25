@@ -111,7 +111,7 @@ class report_available_stocks_xls extends CI_Controller{
         $filename = "available_stocks.xls";
         
         # SEND FILENAME
-        //$workbook->send($filename);
+        $workbook->send($filename);
         
         # ADD WORK SHEET OR WORK SHEET LABEL
         $worksheet = $workbook->addWorksheet('NotTransmit');
@@ -123,43 +123,39 @@ class report_available_stocks_xls extends CI_Controller{
         //$worksheet->freezePanes(array(3,0));
         
         # MAIN HEADER
-        $worksheet->write(0,0,"NOT TRANSMIT SAWT REPORT",$headerFormat);
-        for($i=1;$i<12;$i++) {
+        $worksheet->write(0,0,"AVAILABLE STOCKS",$headerFormat);
+        for($i=1;$i<10;$i++) {
             $worksheet->write(0, $i, "",$headerFormat);    
         }
         
         # COLUMN WIDTH
         $worksheet->setColumn(0,0,20);
-        $worksheet->setColumn(1,1,15);
+        $worksheet->setColumn(1,1,60);
         $worksheet->setColumn(2,2,20);
-        $worksheet->setColumn(3,3,30);
-        $worksheet->setColumn(4,4,10);
+        $worksheet->setColumn(3,3,20);
+        $worksheet->setColumn(4,4,20);
         $worksheet->setColumn(5,5,20);
-        $worksheet->setColumn(6,6,15);
-        $worksheet->setColumn(7,7,30);
-        $worksheet->setColumn(8,8,15);
+        $worksheet->setColumn(6,6,20);
+        $worksheet->setColumn(7,7,20);
+        $worksheet->setColumn(8,8,20);
         $worksheet->setColumn(9,9,20);
-        $worksheet->setColumn(10,10,15);
-        $worksheet->setColumn(10,11,20);
         
         # HEADER
-        $worksheet->write(2,0,"RECEIPT NUMBER",$headerFormat);
-        $worksheet->write(2,1,"RECEIPT DATE",$headerFormat);
-        $worksheet->write(2,2,"ACCOUNT NUMBER",$headerFormat);
-        $worksheet->write(2,3,"ACCOUNT NAME",$headerFormat);
-        $worksheet->write(2,4,"ORG ID",$headerFormat);
-        $worksheet->write(2,5,"AMOUNT",$headerFormat);
-        $worksheet->write(2,6,"TIN",$headerFormat);
-        $worksheet->write(2,7,"BIR REG NAME",$headerFormat);
-        $worksheet->write(2,8,"ATC CODE",$headerFormat);
-        $worksheet->write(2,9,"TAX BASE",$headerFormat);
-        $worksheet->write(2,10,"GL DATE SAWT",$headerFormat);
-        $worksheet->write(2,11,"ORACLE USER NAME",$headerFormat);
+        $worksheet->write(2,0,"GROUP NAME",$headerFormat);
+        $worksheet->write(2,1,"DESCRIPTION",$headerFormat);
+        $worksheet->write(2,2,"PACKAGING",$headerFormat);
+        $worksheet->write(2,3,"UNIT PRICE",$headerFormat);
+        $worksheet->write(2,4,"REL PRICE",$headerFormat);
+        $worksheet->write(2,5,"FRAN PRICE",$headerFormat);
+        $worksheet->write(2,6,"NO. OF ITEMS",$headerFormat);
+        $worksheet->write(2,7,"LOWER LIMIT",$headerFormat);
+        $worksheet->write(2,8,"DATE ENTER",$headerFormat);
+        $worksheet->write(2,9,"DATE UPDATE",$headerFormat);
         
         # DATABASE
-        //$this->load->model('get_report'); 
+        $this->load->model('get_report'); 
         
-        //$data = $this->get_report->get_not_transmit($oracle_user_name,$org_id);
+        $data = $this->get_report->get_available_stocks($cmb_item_group);
         
         # ASSIGN COUNTER ROW
         $ctr = 3; 
@@ -167,7 +163,6 @@ class report_available_stocks_xls extends CI_Controller{
         #ASSIGN ALTERNATE COLOR
         $col = 0;     
         
-        /*
         # LOOP DATA
         foreach($data as $row){  
              
@@ -177,7 +172,18 @@ class report_available_stocks_xls extends CI_Controller{
             $row_right_number = ($col==0) ? $detail_right_color_blue_number:$detail_right_color_white_number;
             $col = ($col==0) ? 1:0;   
             
-            $worksheet->write($ctr,0,$row->RECEIPT_NUMBER,$row_left);
+            $worksheet->write($ctr,0,$row->group_name,$row_left);
+            $worksheet->write($ctr,1,$row->description,$row_left);
+            $worksheet->write($ctr,2,$row->packaging,$row_left);
+            $worksheet->write($ctr,3,$row->unit_price,$row_right_number);
+            $worksheet->write($ctr,4,$row->rel_price,$row_right_number);
+            $worksheet->write($ctr,5,$row->fran_price,$row_right_number);
+            $worksheet->write($ctr,6,$row->no_of_items,$row_right);
+            $worksheet->write($ctr,7,$row->lower_limit,$row_right);
+            $worksheet->write($ctr,8,$row->date_enter,$row_center);
+            $worksheet->write($ctr,9,$row->date_update,$row_center);
+            
+            /*
             $worksheet->write($ctr,1,date('Y-m-d',strtotime($row->RECEIPT_DATE)),$row_center);
             $worksheet->write($ctr,2,$row->ACCOUNT_NUMBER,$row_left);
             $worksheet->write($ctr,3,$row->ACCOUNT_NAME,$row_left);     
@@ -193,22 +199,19 @@ class report_available_stocks_xls extends CI_Controller{
             $worksheet->write($ctr,9,$row->TAX_BASE,$row_right_number);
             $worksheet->write($ctr,10,date('Y-m-d',strtotime($row->GL_DATE_SAWT)),$row_center);
             $worksheet->write($ctr,11,$row->USER_NAME,$row_left);
-            
-           
+            */
+             
             $ctr++;
         }  
-               
-        $data_total = $this->get_report->get_not_transmit_total($oracle_user_name,$org_id);
+        
+        $data_total = $this->get_report->get_total_no_of_items($cmb_item_group);
         if ($data_total->num_rows() > 0){
            $row_total = $data_total->row();
         }  
         
-            
         $worksheet->write($ctr,0,"TOTAL",$headerFormat);             
-        $worksheet->write($ctr,5,$row_total->AMOUNT,$headerFormat2);             
-        $worksheet->write($ctr,9,$row_total->TAX_BASE,$headerFormat2);       
-        */      
-
+        $worksheet->write($ctr,6,$row_total->no_of_items,$headerFormat);                      
+        
         # CLOSE WORK BOOK     
         $workbook->close();
     }
