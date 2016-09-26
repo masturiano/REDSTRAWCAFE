@@ -11,7 +11,7 @@ class Get_report extends CI_Model {
         return $query = $this->db->query($query_current_date);
     }
     
-    #########################( AVAILABLE STOCKS )#########################
+    #########################( AVAILABLE STOCKS REPORT )#########################
     
     /**
     * Get all company for combo box
@@ -107,6 +107,135 @@ class Get_report extends CI_Model {
         ";
         return $query_execute = $this->db->query($query_select);
     } 
+    
+    #########################( SUMMARIZED REPORT )#########################
+    
+    /**
+    * Excel report of summarized report
+    * 
+    * @param string $date 
+    */
+    function get_summarized_report($txt_date_from,$txt_date_to)
+    {         
+        $query_select = "
+            select 
+                DATE_FORMAT(date_enter,'%Y-%m-%d') as date_enter,
+                sum(input_no_of_items) as total_input_no_of_items,
+                sum((unit_price * input_no_of_items)) as total_unit_price,
+                sum((buyer_price * input_no_of_items)) as total_buyer_price,
+                sum(added_price) as total_added_price,
+                (sum((buyer_price * input_no_of_items)) - sum((unit_price * input_no_of_items))) as total_net_sales
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+            group by
+                DATE_FORMAT(date_enter,'%Y-%m-%d')
+        ";
+        $query_execute = $this->db->query($query_select);
+        return $query_execute->result();
+    }
+    
+    /**
+    * Get the total purchased
+    * 
+    * @param string $txt_date_from
+    * @param string $txt_date_to
+    */
+    function get_total_purchased_summarized_report($txt_date_from,$txt_date_to)
+    {   
+        $query_select = "
+            select 
+                sum(input_no_of_items) as total_input_no_of_items
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    } 
+    
+    /**
+    * Get the total unit price
+    * 
+    * @param string $txt_date_from
+    * @param string $txt_date_to
+    */
+    function get_total_unit_price_summarized_report($txt_date_from,$txt_date_to)
+    {   
+        $query_select = "
+            select 
+                sum((unit_price * input_no_of_items)) as total_unit_price
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    } 
+    
+    /**
+    * Get the total buyer price
+    * 
+    * @param string $txt_date_from
+    * @param string $txt_date_to
+    */
+    function get_total_buyer_price_summarized_report($txt_date_from,$txt_date_to)
+    {   
+        $query_select = "
+            select 
+                sum((buyer_price * input_no_of_items)) as total_buyer_price
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    } 
+    
+    /**
+    * Get the total added price
+    * 
+    * @param string $txt_date_from
+    * @param string $txt_date_to
+    */
+    function get_total_added_price_summarized_report($txt_date_from,$txt_date_to)
+    {   
+        $query_select = "
+            select 
+                sum(added_price) as total_added_price
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    } 
+    
+    /**
+    * Get the total net sales
+    * 
+    * @param string $txt_date_from
+    * @param string $txt_date_to
+    */
+    function get_total_net_sales_summarized_report($txt_date_from,$txt_date_to)
+    {   
+        $query_select = "
+            select 
+                (sum((buyer_price * input_no_of_items)) - sum((unit_price * input_no_of_items))) as total_net_sales
+            from 
+                tbl_purchase_order_details
+            where
+                DATE_FORMAT(date_enter,'%Y-%m-%d') >= '{$txt_date_from}'
+                and DATE_FORMAT(date_enter,'%Y-%m-%d') <= '{$txt_date_to}'
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
     
     #########################( CANCELLED )#########################
     

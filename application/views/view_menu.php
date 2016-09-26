@@ -160,7 +160,9 @@ $session_user_level = $this->session->userdata('userLevel');
                         ($session_group_code == 1) || ($session_group_code == 2) || ($session_group_code == 3)
                     ){
                     ?>                  
-                    <li><a href="<? echo site_url('report/available_stocks'); ?>" class="homeIcon" title="Home"><span>Available Stocke</span></a></li> 
+                    <li><a href="<? echo site_url('report/available_stocks_report'); ?>" class="homeIcon" title="Home"><span>Available Stocks</span></a></li> 
+                    <li><a href="<? echo site_url('report/summarized_report'); ?>" class="homeIcon" title="Home"><span>Summarized Report</span></a></li> 
+                    <li><a href="<? echo site_url('report/detailed_report'); ?>" class="homeIcon" title="Home"><span>Detailed Report</span></a></li> 
                     <?php
                     }
                     ?>   

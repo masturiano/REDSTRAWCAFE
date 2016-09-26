@@ -26,12 +26,12 @@ class Report extends CI_Controller {
     
     #########################( AVAILABLE STOCKS )#########################
     
-    public function available_stocks(){  
+    public function available_stocks_report(){  
         # TITLE
         $data['title']  = "REDSTRAW"; 
         
         # MODULE NAME
-        $data['module_name']  = "Available Stocks";   
+        $data['module_name']  = "Available Stocks Report";   
         
         # MODEL
         $this->load->model('get_report'); 
@@ -39,18 +39,47 @@ class Report extends CI_Controller {
         $data['get_item_group_name'] = $this->get_report->get_item_group_name();
 
         # VIEW
-        $this->load->view('view_available_stocks',$data);  
+        $this->load->view('view_available_stocks_report',$data);  
     }
     
-    function generate_available_stocks_xls()
+    function generate_available_stocks_report_xls()
     {   
         # TITLE
-        $data['title']  = "Report Available Stocks"; 
+        $data['title']  = "Available Stocks Report"; 
         
         # MODEL
         $this->load->model('get_report');
                                                                                                    
-        echo "window.open('".base_url()."report_available_stocks_xls/print_excel/".$this->input->post('cmb_item_group')."');";                  
+        echo "window.open('".base_url()."report_available_stocks_report_xls/print_excel/".$this->input->post('cmb_item_group')."');";                  
+    } 
+    
+    #########################( SUMMARIZED REPORT )#########################
+    
+    public function summarized_report(){  
+        # TITLE
+        $data['title']  = "REDSTRAW"; 
+        
+        # MODULE NAME
+        $data['module_name']  = "Summarized Report";   
+        
+        # MODEL
+        $this->load->model('get_report'); 
+        
+        $data['get_item_group_name'] = $this->get_report->get_item_group_name();
+
+        # VIEW
+        $this->load->view('view_summarized_report',$data);  
+    }
+    
+    function generate_summarized_report_xls()
+    {   
+        # TITLE
+        $data['title']  = "Available Stocks Report"; 
+        
+        # MODEL
+        $this->load->model('get_report');
+                                                                                                   
+        echo "window.open('".base_url()."report_summarized_report_xls/print_excel/".$this->input->post('txt_date_from')."/".$this->input->post('txt_date_to')."');";                  
     } 
     
     #########################( CANCELLED )#########################

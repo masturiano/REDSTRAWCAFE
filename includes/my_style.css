@@ -591,31 +591,65 @@ MODAL HEADER COLOR
 }
 
 /*-------------------------
-DIV TABLE AVAILABLE STOCKS
+DIV TABLE AVAILABLE STOCKS REPORT
 ---------------------------*/
-table#table_available_stocks{
+table#table_available_stocks_report{
     border: 0px solid #999;
     background-color: transparent;
     font-family: 'Exo', sans-serif;
     font-size: 12px;
     font-weight: 200;
-    width: 47%;
+    width: 52%;
 }
 
-table#table_available_stocks td.table_label{
-    width: 120px;
+table#table_available_stocks_report td.table_label{
+    width: 1000px;
     border-bottom: 0px solid #999;
     border-color: #1dbfb9;
 }
 
-table#table_available_stocks td.table_colon{
+table#table_available_stocks_report td.table_colon{
     width: 10px;
     border-bottom: 0px solid #999;
     border-color: #1dbfb9;
 }
 
-table#table_available_stocks td.table_data{
-    width: 10%;
+table#table_available_stocks_report td.table_data{
+    width: 50px;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+    margin-top:-2px;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+}
+
+/*-------------------------
+DIV TABLE SUMMARIZED REPORT
+---------------------------*/
+table#table_summarized_report{
+    border: 0px solid #999;
+    background-color: transparent;
+    font-family: 'Exo', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    width: 52%;
+}
+
+table#table_summarized_report td.table_label{
+    width: 1000px;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_summarized_report td.table_colon{
+    width: 10px;
+    border-bottom: 0px solid #999;
+    border-color: #1dbfb9;
+}
+
+table#table_summarized_report td.table_data{
+    width: 50px;
     border-bottom: 0px solid #999;
     border-color: #1dbfb9;
     margin-top:-2px;
