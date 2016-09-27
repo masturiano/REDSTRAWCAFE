@@ -226,32 +226,38 @@ class report_detailed_report_xls extends CI_Controller{
             $ctr++;
         }  
         
-        $data_total_purchased = $this->get_report->get_total_purchased_summarized_report($txt_date_from,$txt_date_to);
-        if ($data_total_purchased->num_rows() > 0){
-           $row_total_purchased = $data_total_purchased->row();
-        }  
-        $data_total_unit_price = $this->get_report->get_total_unit_price_summarized_report($txt_date_from,$txt_date_to);
+        $data_total_unit_price = $this->get_report->get_total_unit_price_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
         if ($data_total_unit_price->num_rows() > 0){
            $row_total_unit_price = $data_total_unit_price->row();
-        } 
-        $data_total_buyer_price = $this->get_report->get_total_buyer_price_summarized_report($txt_date_from,$txt_date_to);
+        }  
+        $data_total_buyer_price = $this->get_report->get_total_buyer_price_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
         if ($data_total_buyer_price->num_rows() > 0){
            $row_total_buyer_price = $data_total_buyer_price->row();
-        }                              
-        $data_total_added_price = $this->get_report->get_total_added_price_summarized_report($txt_date_from,$txt_date_to);
-        if ($data_total_added_price->num_rows() > 0){
-           $row_total_added_price = $data_total_added_price->row();
         } 
-        $data_total_net_sales = $this->get_report->get_total_net_sales_summarized_report($txt_date_from,$txt_date_to);
+        $data_total_input_no_of_items = $this->get_report->get_total_no_of_items_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
+        if ($data_total_input_no_of_items->num_rows() > 0){
+           $row_total_input_no_of_items = $data_total_input_no_of_items->row();
+        } 
+        $data_total_added_buyer_price = $this->get_report->get_total_added_buyer_price_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
+        if ($data_total_added_buyer_price->num_rows() > 0){
+           $row_total_added_buyer_price = $data_total_added_buyer_price->row();
+        } 
+        $data_total_total_total_unit_price = $this->get_report->get_total_total_unit_price_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
+        if ($data_total_total_total_unit_price->num_rows() > 0){
+           $row_total_total_unit_price = $data_total_total_total_unit_price->row();
+        } 
+        $data_total_net_sales = $this->get_report->get_total_net_sales_detailed_report($txt_date_from,$txt_date_to,$cmb_branch_group);
         if ($data_total_net_sales->num_rows() > 0){
            $row_total_net_sales = $data_total_net_sales->row();
         } 
-         
+        
         $worksheet->write($ctr,0,"TOTAL",$headerFormat);             
-        $worksheet->write($ctr,1,$row_total_purchased->total_input_no_of_items,$headerFormat);                      
-        $worksheet->write($ctr,2,$row_total_unit_price->total_unit_price,$headerFormat2);                      
-        $worksheet->write($ctr,3,$row_total_added_price->total_added_price,$headerFormat2);                      
-        $worksheet->write($ctr,4,$row_total_net_sales->total_net_sales,$headerFormat2);                      
+        $worksheet->write($ctr,5,$row_total_unit_price->total_unit_price,$headerFormat2);                      
+        $worksheet->write($ctr,6,$row_total_buyer_price->total_buyer_price,$headerFormat2);                      
+        $worksheet->write($ctr,7,$row_total_input_no_of_items->total_input_no_of_items,$headerFormat);  
+        $worksheet->write($ctr,8,$row_total_added_buyer_price->total_added_price,$headerFormat2);                    
+        $worksheet->write($ctr,9,$row_total_total_unit_price->total_total_unit_price,$headerFormat2);                    
+        $worksheet->write($ctr,10,$row_total_net_sales->total_net_sales,$headerFormat2);                                        
         
         # CLOSE WORK BOOK     
         $workbook->close();
