@@ -67,6 +67,8 @@
                     $("#text_branch_name").val('');                                              
                     $("#text_branch_no").val(''); 
                     $("#text_owner").val('');                                         
+                    $("#text_delivery_charge").val('');                                         
+                    $("#text_previous_bal").val('');                                         
                     $("#disp_branch_no").html(''); 
                     $("#disp_owner").html('');  
                          
@@ -99,6 +101,24 @@
                         } 
                         else{
                             $('#text_branch_name').css("border","gray solid 1px");    
+                        }
+                        if($('#text_delivery_charge').val().length == 0){
+                            bootbox.alert("Please input Delivery Charge!", function() {  
+                                $('#text_delivery_charge').css("border","red solid 1px");  
+                            }); 
+                            return false;
+                        } 
+                        else{
+                            $('#text_delivery_charge').css("border","gray solid 1px");    
+                        }
+                        if($('#text_previous_bal').val().length == 0){
+                            bootbox.alert("Please input Previous Balance!", function() {  
+                                $('#text_previous_bal').css("border","red solid 1px");  
+                            }); 
+                            return false;
+                        } 
+                        else{
+                            $('#text_previous_bal').css("border","gray solid 1px");    
                         }
                          
                         $.ajax({
@@ -257,6 +277,8 @@
             $("#text_branch_no").val(''); 
             $("#disp_owner").html('');
             $("#text_owner").val(''); 
+            $("#text_delivery_charge").val(''); 
+            $("#text_previous_bal").val(''); 
             // DETAILS
             $("#text_item_description").val(''); 
             $("#disp_buyer_price").html('');
@@ -330,7 +352,7 @@
         
         // ALLOW NUMERIC ONLY ON TEXTFIELD
         $(function(){
-            $("#text_input_no_of_items").keydown(function (e) {
+            $("#text_input_no_of_items,#text_delivery_charge,#text_previous_bal").keydown(function (e) {
                 // Allow: backspace, delete, tab, escape, enter and .
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
                      // Allow: Ctrl+A, Command+A
@@ -452,6 +474,22 @@
                             <td class="table_data">
                                 <div id="disp_owner"></div>
                                 <?php echo form_input($text_owner,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Delivery Charge</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_owner"></div>
+                                <?php echo form_input($text_delivery_charge,''); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_label"><b>Previous Balance</b></td>
+                            <td class="table_colon"><b>:</b></td>
+                            <td class="table_data">
+                                <div id="disp_owner"></div>
+                                <?php echo form_input($text_previous_bal,''); ?>
                             </td>
                         </tr>
                     </table>

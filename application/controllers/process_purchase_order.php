@@ -113,6 +113,24 @@ class Process_purchase_order extends CI_Controller {
             'class' => 'form-control',
         );
         
+        $data['text_delivery_charge'] = array(
+            'name' => 'text_delivery_charge',
+            'id' => 'text_delivery_charge',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'class' => 'form-control'
+        ); 
+        
+        $data['text_previous_bal'] = array(
+            'name' => 'text_previous_bal',
+            'id' => 'text_previous_bal',
+            'maxlength' => '50',
+            'size' => '50',                              
+            'style' => 'width:100%',
+            'class' => 'form-control'
+        ); 
+        
         # FORM PURCHASE ORDER DETAIL
         $data['text_item_id'] = array(
             'name' => 'text_item_id',
@@ -275,7 +293,9 @@ class Process_purchase_order extends CI_Controller {
             "owner" => $this->input->post('text_owner'), 
             "amount" => 0.00, 
             "date_enter" => $row->current_date_time,
-            "date_update" => null
+            "date_update" => null,
+            "delivery_charge" => $this->input->post('text_delivery_charge'),
+            "previous_bal" => $this->input->post('text_previous_bal'),
         );
         $this->get_process_purchase_order->add_new_header($new_header);
         echo "New header has been save";

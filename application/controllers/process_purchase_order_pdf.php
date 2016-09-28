@@ -140,11 +140,18 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         
         // TABLE FOOTER
         $this->pdf->SetFont('Arial','B',8); // SET FONT
-        $this->pdf->Cell(104,8,'TOTAL','',0,'L');
+        $this->pdf->Cell(104,8,'TOTAL AMOUNT','',0,'L');
         $this->pdf->Cell(30,8,$footer_total_input_no_of_items_row->input_no_of_items,'',0,'L');
         $this->pdf->Cell(30,8,number_format($footer_total_buyer_price_row->buyer_price,2),'',0,'L');
         $this->pdf->Cell(30,8,number_format($footer_total_added_price_row->added_price,2),'',1,'L');
-        $this->pdf->Cell(0,4,'',0,10,'L');
+        $this->pdf->Cell(0,1,'',0,1,'L');
+        $this->pdf->Cell(134,4,'','',0,'L');
+        $this->pdf->Cell(30,4,'PREVIOUS BAL','',0,'L');
+        $this->pdf->Cell(50,4,number_format($header_order_no_row->previous_bal,2),'',1,'L');
+        $this->pdf->Cell(134,4,'','',0,'L');
+        $this->pdf->Cell(50,4,'DELIVERY CHARGE','',0,'L');
+        $this->pdf->Cell(194,4,number_format($header_order_no_row->delivery_charge,2),'',1,'L');
+        $this->pdf->Cell(0,4,'',0,1,'L');
         
         $this->pdf->SetFont('Arial','BI',8);
         $this->pdf->Cell(190,4,'If you have any question about this order form please contact',0,1,'C');
