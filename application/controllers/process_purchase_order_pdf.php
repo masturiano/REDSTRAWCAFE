@@ -56,9 +56,11 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         # HEADER
         $this->pdf->SetFont('Arial','B',12);
         $this->pdf->Cell(0,4,'ORDER FORM',0,1,'R');
+        $image_redstraw_logo = "includes/images/redstraw_logo.jpg";
+        $this->pdf->Cell(20,35,$this->pdf->Image($image_redstraw_logo,20,20,25),0,1,'R');
         $this->pdf->Cell(0,4,'RedStraw Cafe',0,1,'L');
         $this->pdf->Cell(0,4,"The frappe that you can't resist...",0,1,'L');
-        $this->pdf->Cell(0,4,'',0,1,'L');
+        $this->pdf->Cell(0,4,'',0,1,'L');                          
         
         $this->pdf->SetFont('Arial','',8);
         $this->pdf->Cell(100,4,'Unit 2 G/F Padilla Bldg. 2136 CM Recto Ave.',0,1,'L');
@@ -123,9 +125,9 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         $this->pdf->SetFont('Arial','',8); // SET FONT
         foreach($details as $details_val) {
             $this->pdf->Cell(104,6,$details_val->description,'BTLR',0,'L');
-            $this->pdf->Cell(30,6,$details_val->input_no_of_items,'BTLR',0,'L');
-            $this->pdf->Cell(30,6,number_format($details_val->buyer_price,2),'BTLR',0,'L');
-            $this->pdf->Cell(30,6,number_format($details_val->added_price,2),'BTLR',1,'L');
+            $this->pdf->Cell(30,6,$details_val->input_no_of_items,'BTLR',0,'R');
+            $this->pdf->Cell(30,6,number_format($details_val->buyer_price,2),'BTLR',0,'R');
+            $this->pdf->Cell(30,6,number_format($details_val->added_price,2),'BTLR',1,'R');
             //$this->pdf->Cell(30,6,date('Y-m-d',strtotime($details_val->RECEIPT_DATE)),'BTLR',0,'C');
             //$this->pdf->Cell(30,6,$details_val->ACCOUNT_NUMBER,'BTLR',0,'L');
             //$this->pdf->Cell(50,6,substr($val->ACCOUNT_NAME,0,30),'BTLR',0,'L');
@@ -140,19 +142,26 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         
         // TABLE FOOTER
         $this->pdf->SetFont('Arial','B',8); // SET FONT
-        $this->pdf->Cell(104,8,'TOTAL AMOUNT','',0,'L');
-        $this->pdf->Cell(30,8,$footer_total_input_no_of_items_row->input_no_of_items,'',0,'L');
-        $this->pdf->Cell(30,8,number_format($footer_total_buyer_price_row->buyer_price,2),'',0,'L');
-        $this->pdf->Cell(30,8,number_format($footer_total_added_price_row->added_price,2),'',1,'L');
-        $this->pdf->Cell(0,1,'',0,1,'L');
-        $this->pdf->Cell(134,4,'','',0,'L');
-        $this->pdf->Cell(30,4,'PREVIOUS BAL','',0,'L');
-        $this->pdf->Cell(50,4,number_format($header_order_no_row->previous_bal,2),'',1,'L');
-        $this->pdf->Cell(134,4,'','',0,'L');
-        $this->pdf->Cell(50,4,'DELIVERY CHARGE','',0,'L');
-        $this->pdf->Cell(194,4,number_format($header_order_no_row->delivery_charge,2),'',1,'L');
-        $this->pdf->Cell(0,4,'',0,1,'L');
+        $this->pdf->Cell(134,6,'','',0,'L');
+        $this->pdf->Cell(30,6,'TOTAL AMOUNT :','BTLR',0,'L');
+        //$this->pdf->Cell(30,8,$footer_total_input_no_of_items_row->input_no_of_items,'',0,'L');
+        //$this->pdf->Cell(30,8,number_format($footer_total_buyer_price_row->buyer_price,2),'',0,'L');
+        $this->pdf->Cell(30,6,number_format($footer_total_added_price_row->added_price,2),'BTLR',1,'R');
+        $this->pdf->Cell(134,6,'','',0,'L');
+        $this->pdf->Cell(30,6,'','BTLR',0,'L');
+        $this->pdf->Cell(30,6,'','BTLR',1,'L');
+        $this->pdf->Cell(134,6,'','',0,'L');
+        $this->pdf->Cell(30,6,'PREVIOUS BAL :','BTLR',0,'L');
+        $this->pdf->Cell(30,6,number_format($header_order_no_row->previous_bal,2),'BTLR',1,'R');
+        $this->pdf->Cell(134,6,'','',0,'L');
+        $this->pdf->Cell(30,6,'DELIVERY CHARGE :','BTLR',0,'L');
+        $this->pdf->Cell(30,6,number_format($header_order_no_row->delivery_charge,2),'BTLR',1,'R');
+        $this->pdf->Cell(134,6,'','',0,'L');
+        $this->pdf->Cell(30,6,'TOTAL BALANCE :','BTLR',0,'L');
+        $total_balance = (int)$footer_total_added_price_row->added_price + (int)$header_order_no_row->previous_bal +  (int)$header_order_no_row->delivery_charge;
+        $this->pdf->Cell(30,6,number_format($total_balance,2),'BTLR',1,'R');
         
+        $this->pdf->Cell(1,6,'','',1,'L');
         $this->pdf->SetFont('Arial','BI',8);
         $this->pdf->Cell(190,4,'If you have any question about this order form please contact',0,1,'C');
         $this->pdf->Cell(190,4,'242-1353 / Email : redstrawcafe@gmail.com',0,1,'C');
