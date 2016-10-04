@@ -615,5 +615,6 @@ class Process_purchase_order extends CI_Controller {
         $order_no = $this->input->post('post_order_no');
         
         echo "window.open('".base_url()."process_purchase_order_pdf/index/".str_replace(',','-',$order_no)."');";                  
-    }                  
+    }  
+                  
 }

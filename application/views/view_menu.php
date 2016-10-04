@@ -98,6 +98,7 @@ $session_user_level = $this->session->userdata('userLevel');
                     ?>
                     <li><a href="<? echo site_url('process_add_stock/display_stock'); ?>" class="homeIcon" title="Home"><span>Add Stock</span></a></li>
                     <li><a href="<? echo site_url('process_purchase_order/display_order_form'); ?>" class="homeIcon" title="Home"><span>Purchase Order</span></a></li>
+                    <li><a href="<? echo site_url('process_cancel_order/display_cancel'); ?>" class="homeIcon" title="Home"><span>Cancel Order</span></a></li>
                     <?php
                     }
                     ?>
