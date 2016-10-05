@@ -34,121 +34,53 @@
                 return false;
             }
             else{
-                $('#text_order_no').css("border","lightgray solid 1px");  
-                cancellation($('#text_order_no').val());  
+                $('#text_order_no').css("border","lightgray solid 1px"); 
+                if($('#text_order_no').val().length < 20){
+                    bootbox.alert("Order number must be 20 digits!", function() {
+                        $('#text_order_no').css("border","red solid 1px");
+                    });    
+                    return false;
+                }
+                else{
+                    $('#text_order_no').css("border","lightgray solid 1px");  
+                    cancellation($('#text_order_no').val());  
+                }  
             }
         }
         
         function cancellation(text_order_no){
-            // START AVOID CLOSING THE MODAL
-            $('#modalCancelOrderNo').modal({
-                backdrop: 'static',
-                keyboard: false
-            }); 
-            $('#cancelling').click( function (e) {
-                e.stopImmediatePropagation();
-                $.ajax({
-                    url: "<?php echo base_url('process_cancel_order/check_order_no');?>",
-                    type: "POST",
-                    data: "post_order_no="+text_order_no,
-                    success: function(){
-                        bootbox.alert("Selected item successfully deleted!", function() {
-                        });
-                        $('#deleteOrderNoItemDetail').modal('hide');
-                        $('#btn_delete').attr('disabled','disabled');
-                        data_order_no = "<?=$this->input->post('post_purchase_order_no');?>";
-                        order_no = data_order_no.length; 
-                        order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data_order_no);
-                        order_no_display = order_no_add_zero.val().slice(order_no);
-                        viewDetails(order_no_display);
-                    }         
-                });   
-            });       
-            // END AVOID CLOSING THE MODAL
             $.ajax({
-                url: "<?php echo base_url('process_purchase_order/get_order_no');?>",
+                url: "<?php echo base_url('process_cancel_order/check_order_no');?>",
                 type: "POST",
-                data: "post_buyer="+value,
-                success: function(data){  
-                    order_no_display = '';
-                    order_no = data.length; 
-                    order_no_add_zero = $("#text_order_no").val('00000000000000000000'+data);
-                    order_no_display = order_no_add_zero.val().slice(order_no);
-                    
-                    $('#text_buyer').val(value);
-                    $('#text_order_no').val(order_no_display);
-                    $('#disp_order_no').html(order_no_display);
-                    $("#text_branch_id").val('');  
-                    $("#text_branch_name").val('');                                              
-                    $("#text_branch_no").val(''); 
-                    $("#text_owner").val('');                                         
-                    $("#text_delivery_charge").val('');                                         
-                    $("#text_previous_bal").val('');                                         
-                    $("#disp_branch_no").html(''); 
-                    $("#disp_owner").html('');  
-                         
-                    $('#create_header').modal('show'); 
-                    $('#saving_header').click( function (e) {
-                        e.stopImmediatePropagation();
-                        if($('#text_branch_name').val().length == 0){
-                            bootbox.alert("Please search Branch Name!", function() {  
-                                $('#text_branch_name').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#text_branch_name').css("border","gray solid 1px");    
-                        }
-                        if($('#text_branch_no').val().length == 0){
-                            bootbox.alert("Please search Branch Name!", function() {  
-                                $('#text_branch_name').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#text_branch_name').css("border","gray solid 1px");    
-                        }
-                        if($('#text_owner').val().length == 0){
-                            bootbox.alert("Please search Branch Name!", function() {  
-                                $('#text_branch_name').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#text_branch_name').css("border","gray solid 1px");    
-                        }
-                        if($('#text_delivery_charge').val().length == 0){
-                            bootbox.alert("Please input Delivery Charge!", function() {  
-                                $('#text_delivery_charge').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#text_delivery_charge').css("border","gray solid 1px");    
-                        }
-                        if($('#text_previous_bal').val().length == 0){
-                            bootbox.alert("Please input Previous Balance!", function() {  
-                                $('#text_previous_bal').css("border","red solid 1px");  
-                            }); 
-                            return false;
-                        } 
-                        else{
-                            $('#text_previous_bal').css("border","gray solid 1px");    
-                        }
-                         
-                        $.ajax({
-                            url: "<?php echo base_url('process_purchase_order/saving_header');?>",
-                            type: "POST",
-                            data: $('#purchase_header_form').serialize(),
-                            success: function(){
-                                bootbox.alert("Header successfully saved!", function() {  
-                                    $('#create_header').modal('hide'); 
-                                    createDetails(order_no_display);
-                                });  
-                            }         
-                        });   
-                    });
-                }       
+                data: "post_order_no="+text_order_no,
+                success: function(data){
+                    if(data == 0){
+                        bootbox.alert("Order number not exist!", function() {
+                            $('#text_order_no').css("border","red solid 1px");
+                        });    
+                        return false;    
+                    }
+                    if(data == 1){
+                        // START AVOID CLOSING THE MODAL
+                        $('#modalCancelOrderNo .modal-body').html('Are you sure you want to cancel order number '+text_order_no+'?');
+                        $('#modalCancelOrderNo').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }); 
+                        $('#cancelling').click( function (e) {
+                            e.stopImmediatePropagation();
+                            $.ajax({
+                                url: "<?php echo base_url('process_cancel_order/cancel_order_no');?>",
+                                type: "POST",
+                                data: "post_order_no="+text_order_no,
+                                success: function(data){
+                                    eval(data);    
+                                }         
+                            });   
+                        });       
+                        // END AVOID CLOSING THE MODAL 
+                    }    
+                }         
             });   
         }   
         
@@ -175,15 +107,15 @@
     <style type="text/css">
         body .modal-header {
             /* new custom width */
-            width: 948px;
+            width: 548px;
         }
         body .modalbody{
             /* new custom width */
-            width: 950px;
+            width: 550px;
         }
         body .modal-dialog{
             /* new custom width */
-            width: 950px;
+            width: 550px;
         }
         .close {display: none;}
     </style>
@@ -240,7 +172,6 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
-            Are you sure you want to cancel order no. 
           </div>
           <div class="modal-footer">
             <button type="button" id="cancel_close" class="btn btn-default" data-dismiss="modal">No</button>
