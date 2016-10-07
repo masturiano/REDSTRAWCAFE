@@ -94,6 +94,66 @@ class Get_process_cancel_order extends CI_Model {
             where 
                 purchase_order_no = {$order_no};
         ";
+        return $query = $this->db->query($query_select);
+    }
+    
+    # DELETE HEADER ORDER NO
+    function deleteHeaderOrderNo($order_no){
+        $query_select = "       
+            delete
+            from 
+                tbl_purchase_order_header
+            where 
+                purchase_order_no = {$order_no};
+        ";
+        $query = $this->db->query($query_select);
+    }
+    
+    # CANCEL DETAILS ORDER NO
+    function cancelDetailsOrderNo($order_no,$item_id){
+        $query_select = "       
+            insert into tbl_purchase_order_details_cancel(
+                purchase_order_no,
+                item_id,
+                group_code,
+                no_of_items,
+                unit_price,
+                buyer_price,
+                input_no_of_items,
+                added_price,
+                date_enter,
+                date_update
+            )
+            select 
+                purchase_order_no,
+                item_id,
+                group_code,
+                no_of_items,
+                unit_price,
+                buyer_price,
+                input_no_of_items,
+                added_price,
+                date_enter,
+                date_update
+            from 
+                tbl_purchase_order_details
+            where
+                purchase_order_no = {$order_no}
+                and item_id = {$item_id};
+        ";
+        return $query = $this->db->query($query_select);
+    }
+    
+    # DELETE HEADER ORDER NO
+    function deleteDetailsOrderNo($order_no,$item_id){
+        $query_select = "       
+            delete
+            from 
+                tbl_purchase_order_details
+            where 
+                purchase_order_no = {$order_no}
+                and item_id = {$item_id};
+        ";
         $query = $this->db->query($query_select);
     }
 }

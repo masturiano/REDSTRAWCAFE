@@ -103,46 +103,15 @@ class Process_cancel_order extends CI_Controller {
                     "date_update" => $row->current_date_time
                 );
                 if($this->get_process_cancel_order->edit_item_quantity($edit_item_qty,$row_item_qty_order_no->item_id)){
-                    if($this->get_process_cancel_order->cancelHeaderOrderNo($this->input->post('post_order_no'))){
-                        
-                    }
+                    if($this->get_process_cancel_order->cancelDetailsOrderNo($this->input->post('post_order_no'),$row_item_qty_order_no->item_id)){
+                        $this->get_process_cancel_order->deleteDetailsOrderNo($this->input->post('post_order_no'),$row_item_qty_order_no->item_id);
+                        #nag loop so nagloop din ang pag delete
+                    } 
                 }
             }
         }
-                                                                                                                         
-        /*
-        $result_item_qty = $this->get_process_cancel_order->get_item_quantity($this->input->post('post_order_no'));
-        if ($result_item_qty->num_rows() > 0)
-        {
-            $row_final_qty = $result_item_qty->row();
-            $result_item_qty_per_purchase_order = $this->get_process_cancel_order->get_item_quantity_order_no($this->input->post('post_order_no'),$this->input->post('post_id'));
-            if ($result_item_qty_per_purchase_order->num_rows() > 0)
-            {
-                $row_item_qty_per_purchase_order = $result_item_qty_per_purchase_order->row();
-                $final_qty = $row_item_qty_per_purchase_order->input_no_of_items + $row_final_qty->no_of_items;
-                $edit_item_qty = array(
-                    "no_of_items" => $final_qty,
-                    "date_update" => $row->current_date_time
-                );
-                if($this->get_process_purchase_order->edit_item_quantity($edit_item_qty,$this->input->post('post_id'))){
-                    if($this->get_process_purchase_order->delete_order_no_details_item($this->input->post('post_order_no'),$this->input->post('post_id'))){
-                        $result_total_details = $this->get_process_purchase_order->get_total_detail($this->input->post('post_order_no'));
-                        if ($result_total_details->num_rows() > 0)
-                        {
-                            $row_total_details = $result_total_details->row();
-                            $edit_header = array(
-                                "amount" => $row_total_details->total_added_price,
-                                "date_update" => $row->current_date_time
-                            );
-                           $this->get_process_purchase_order->edit_header_amount($edit_header,$this->input->post('post_order_no'));
-                        }
-                        else{
-                            echo "error";
-                        }   
-                    }    
-                }
-            } 
-        } 
-        */
+        if($this->get_process_cancel_order->cancelHeaderOrderNo($this->input->post('post_order_no'))){
+            $this->get_process_cancel_order->deleteHeaderOrderNo($this->input->post('post_order_no'));
+        }
     }
 }

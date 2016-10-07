@@ -69,12 +69,14 @@
                         }); 
                         $('#cancelling').click( function (e) {
                             e.stopImmediatePropagation();
+                            $('#cancelling').attr('disabled','disabled');
                             $.ajax({
                                 url: "<?php echo base_url('process_cancel_order/cancel_order_no');?>",
                                 type: "POST",
                                 data: "post_order_no="+text_order_no,
                                 success: function(data){
-                                    eval(data);    
+                                    $("#text_order_no").val('');
+                                    document.location.reload();   
                                 }         
                             });   
                         });       
