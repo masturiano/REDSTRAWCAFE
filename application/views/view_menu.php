@@ -86,100 +86,67 @@ $session_user_level = $this->session->userdata('userLevel');
             <div>  
                 <ul>
                     <?php   
-                    # RESTRICT DEPARTMENT DEPARTMENT
-                    # 1 = MIS
+                    /**
+                    * Restriction of user 
+                    * 
+                    * 1 = ADMINISTRATOR
+                    * 2 = OWNER
+                    * 3 = USER
+                    */
                     if(
-                        ($session_group_code == 1)
-                        ||
-                        ($session_user_level == 2)
-                        ||
-                        ($session_user_level == 3)
+                        ($session_group_code == 1) || 
+                        ($session_group_code == 2)
                     ){
                     ?>
                     <li><a href="<? echo site_url('process_add_stock/display_stock'); ?>" class="homeIcon" title="Home"><span>Add Stock</span></a></li>
-                    <li><a href="<? echo site_url('process_purchase_order/display_order_form'); ?>" class="homeIcon" title="Home"><span>Purchase Order</span></a></li>
                     <li><a href="<? echo site_url('process_cancel_order/display_cancel'); ?>" class="homeIcon" title="Home"><span>Cancel Order</span></a></li>
                     <?php
                     }
                     ?>
                     <?php   
-                    # ALLOW DEPARTMENT
-                    # 4 = ACCOUNTING
+                    /**
+                    * Restriction of user 
+                    * 
+                    * 1 = ADMINISTRATOR
+                    * 2 = OWNER
+                    * 3 = USER
+                    */
                     if(
-                        ($session_group_code == 4)
-                        && 
-                        ($session_user_level == 2)
+                        ($session_group_code == 1) || 
+                        ($session_group_code == 2) ||
+                        ($session_group_code == 3)
                     ){
                     ?>
-                        <li><a href="<? echo site_url('process_ho/receive'); ?>" class="homeIcon" title="Home"><span>Receive</span></a></li>
-                        <li><a href="<? echo site_url('process_ho/received_edit'); ?>" class="homeIcon" title="Home"><span>Received Edit</span></a></li>
-                        <li><a href="<? echo site_url('process_ho/post'); ?>" class="homeIcon" title="Home"><span>BIR File Creation</span></a></li>    
+                    <li><a href="<? echo site_url('process_purchase_order/display_order_form'); ?>" class="homeIcon" title="Home"><span>Purchase Order</span></a></li>
                     <?php
                     }
                     ?>
-                    
                 </ul>  
             </div>
         </li>
         <li><a href="#" class="parent"><span>Report</span></a>
             <div>
                 <ul>   
-                    <?php   
-                    # ALLOW DEPARTMENT
-                    # 4 = ACCOUNTING
+                    <?php  
+                    /**
+                    * Restriction of user 
+                    * 
+                    * 1 = ADMINISTRATOR
+                    * 2 = OWNER
+                    * 3 = USER
+                    */
                     if(
-                        ($session_group_code == 4)
-                        && 
-                        ($session_user_level == 2)
-                    ){
-                    ?>                  
-                    <li><a href="<? echo site_url('report/not_transmit_all'); ?>" class="homeIcon" title="Home"><span>Not Transmit All</span></a></li>
-                    <?php
-                    }
-                    ?> 
-                    <?php   
-                    # RESTRICT DEPARTMENT DEPARTMENT
-                    # 1 = MIS
-                    if(
-                        ($session_group_code != 1)
-                        && 
-                        ($session_user_level == 2)
-                    ){
-                    ?>
-                    <li><a href="<? echo site_url('report/cancelled'); ?>" class="homeIcon" title="Home"><span>Cancelled</span></a></li>   
-                    <li><a href="<? echo site_url('report/not_transmit'); ?>" class="homeIcon" title="Home"><span>Not Transmit</span></a></li> 
-                    <li><a href="<? echo site_url('report/unreceive'); ?>" class="homeIcon" title="Home"><span>Unreceive</span></a></li> 
-                    <li><a href="<? echo site_url('report/reprint_transmittal'); ?>" class="homeIcon" title="Home"><span>Reprint Transmittal</span></a></li> 
-                    <?php
-                    }
-                    ?>  
-                    <?php   
-                    # ALLOW DEPARTMENT
-                    # 4 = ACCOUNTING
-                    # 5 = CREDIT & COLLECTION
-                    if(
-                        ($session_group_code == 1) || ($session_group_code == 2) || ($session_group_code == 3)
+                        ($session_group_code == 1) || 
+                        ($session_group_code == 2)
                     ){
                     ?>                  
                     <li><a href="<? echo site_url('report/available_stocks_report'); ?>" class="homeIcon" title="Home"><span>Available Stocks</span></a></li> 
                     <li><a href="<? echo site_url('report/summarized_report'); ?>" class="homeIcon" title="Home"><span>Summarized Report</span></a></li> 
                     <li><a href="<? echo site_url('report/detailed_report'); ?>" class="homeIcon" title="Home"><span>Detailed Report</span></a></li> 
+                    <li><a href="<? echo site_url('report/cancelled_order_report'); ?>" class="homeIcon" title="Home"><span>Cancelled Order</span></a></li> 
                     <?php
                     }
-                    ?>   
-                    <?php   
-                    # ALLOW DEPARTMENT
-                    # 4 = ACCOUNTING
-                    if(
-                        ($session_group_code == 4)
-                        && 
-                        ($session_user_level == 2)
-                    ){
-                    ?>                  
-                    <li><a href="<? echo site_url('report/post'); ?>" class="homeIcon" title="Home"><span>BIR File Creation</span></a></li> 
-                    <?php
-                    }
-                    ?>   
+                    ?>     
                 </ul>
             </div>
         </li>
@@ -187,9 +154,17 @@ $session_user_level = $this->session->userdata('userLevel');
             <div>
                 <ul>
                     <?
-                    # ALLOW DEPARTMENT
-                    # 1 = MIS
-                    if($session_group_code == 1){    
+                    /**
+                    * Restriction of user 
+                    * 
+                    * 1 = ADMINISTRATOR
+                    * 2 = OWNER
+                    * 3 = USER
+                    */
+                    if(
+                        ($session_group_code == 1) || 
+                        ($session_group_code == 2)
+                    ){   
                     ?>
                     <li><a href="<? echo site_url('systema/user_maintenance'); ?>" class="homeIcon" title="User Maintenance"><span>User Maintenance</span></a></li>
                     <li><a href="<? echo site_url('systema/item_maintenance'); ?>" class="homeIcon" title="Item Maintenance"><span>Item Maintenance</span></a></li>

@@ -109,4 +109,33 @@ class Report extends CI_Controller {
         echo "window.open('".base_url()."report_detailed_report_xls/print_excel/".$this->input->post('txt_date_from')."/".$this->input->post('txt_date_to')."/".$this->input->post('cmb_branch_group')."');";                  
     } 
     
+    #########################( CANCELLED ORDER REPORT )#########################
+    
+    public function cancelled_order_report(){  
+        # TITLE
+        $data['title']  = "REDSTRAW"; 
+        
+        # MODULE NAME
+        $data['module_name']  = "Cancelled Order Report";   
+        
+        # MODEL
+        $this->load->model('get_report'); 
+        
+        $data['get_branch_name'] = $this->get_report->get_branch_name();
+
+        # VIEW
+        $this->load->view('view_cancelled_order_report',$data);  
+    }
+    
+    function generate_cancelled_order_report_xls()
+    {   
+        # TITLE
+        $data['title']  = "Cancelled Order Report"; 
+        
+        # MODEL
+        $this->load->model('get_report');
+                                                                                                   
+        echo "window.open('".base_url()."report_cancelled_order_report_xls/print_excel/".$this->input->post('txt_date_from')."/".$this->input->post('txt_date_to')."/".$this->input->post('cmb_branch_group')."');";                  
+    } 
+    
 }

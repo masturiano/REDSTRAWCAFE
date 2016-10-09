@@ -166,6 +166,7 @@ class Get_process_purchase_order extends CI_Model {
                 a.item_id,
                 b.description,
                 b.packaging,
+                c.group_code,
                 c.group_name,
                 a.unit_price,
                 a.buyer_price,

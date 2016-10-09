@@ -122,12 +122,19 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
         $this->pdf->Cell(30,8,'AMOUNT','BTLR',1,'L');
             
         // TABLE DETAILS
+        $this->pdf->SetFont('Arial','B',8); // SET FONT
+        $this->pdf->Cell(104,6,'INGREDIENTS','BTLR',0,'L');
+        $this->pdf->Cell(30,6,' ','BTLR',0,'R');
+        $this->pdf->Cell(30,6,' ','BTLR',0,'R');
+        $this->pdf->Cell(30,6,' ','BTLR',1,'R'); 
         $this->pdf->SetFont('Arial','',8); // SET FONT
         foreach($details as $details_val) {
-            $this->pdf->Cell(104,6,$details_val->description,'BTLR',0,'L');
-            $this->pdf->Cell(30,6,$details_val->input_no_of_items,'BTLR',0,'R');
-            $this->pdf->Cell(30,6,number_format($details_val->buyer_price,2),'BTLR',0,'R');
-            $this->pdf->Cell(30,6,number_format($details_val->added_price,2),'BTLR',1,'R');
+            if($details_val->group_code == 1){
+                $this->pdf->Cell(104,6,$details_val->description,'BTLR',0,'L');
+                $this->pdf->Cell(30,6,$details_val->input_no_of_items,'BTLR',0,'R');
+                $this->pdf->Cell(30,6,number_format($details_val->buyer_price,2),'BTLR',0,'R');
+                $this->pdf->Cell(30,6,number_format($details_val->added_price,2),'BTLR',1,'R');    
+            }     
             //$this->pdf->Cell(30,6,date('Y-m-d',strtotime($details_val->RECEIPT_DATE)),'BTLR',0,'C');
             //$this->pdf->Cell(30,6,$details_val->ACCOUNT_NUMBER,'BTLR',0,'L');
             //$this->pdf->Cell(50,6,substr($val->ACCOUNT_NAME,0,30),'BTLR',0,'L');
@@ -138,6 +145,20 @@ class Process_Purchase_Order_Pdf extends CI_Controller {
             //$this->pdf->Cell(20,6,$details_val->ATC_CODE,'BTLR',0,'L');
             //$this->pdf->Cell(30,6,$details_val->TAX_BASE,'BTLR',0,'R');
             //$this->pdf->Cell(30,6,date('Y-m-d',strtotime($details_val->GL_DATE_SAWT)),'BTLR',1,'C');
+        } 
+        $this->pdf->SetFont('Arial','B',8); // SET FONT
+        $this->pdf->Cell(104,6,'OTHERS','BTLR',0,'L');
+        $this->pdf->Cell(30,6,' ','BTLR',0,'R');
+        $this->pdf->Cell(30,6,' ','BTLR',0,'R');
+        $this->pdf->Cell(30,6,' ','BTLR',1,'R'); 
+        $this->pdf->SetFont('Arial','',8); // SET FONT
+        foreach($details as $details_val_others) {
+            if($details_val_others->group_code == 2 || $details_val_others->group_code == 3){
+                $this->pdf->Cell(104,6,$details_val_others->description,'BTLR',0,'L');
+                $this->pdf->Cell(30,6,$details_val_others->input_no_of_items,'BTLR',0,'R');
+                $this->pdf->Cell(30,6,number_format($details_val_others->buyer_price,2),'BTLR',0,'R');
+                $this->pdf->Cell(30,6,number_format($details_val_others->added_price,2),'BTLR',1,'R');    
+            }   
         } 
         
         // TABLE FOOTER
