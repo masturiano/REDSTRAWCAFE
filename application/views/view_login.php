@@ -143,6 +143,7 @@
         <div class="header"> 
         </div>  
         <div class="body">
+            <div class="login_logo"></div>
             <input type="text" placeholder="username" name="txt_username" id="txt_username"><br>
             <input type="password" placeholder="password" name="txt_password" id="txt_password"><br>
             <input type="button" value="Login" onclick="login();">
