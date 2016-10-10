@@ -138,4 +138,66 @@ class Report extends CI_Controller {
         echo "window.open('".base_url()."report_cancelled_order_report_xls/print_excel/".$this->input->post('txt_date_from')."/".$this->input->post('txt_date_to')."/".$this->input->post('cmb_branch_group')."');";                  
     } 
     
+    #########################( REPRINT ORDER REPORT )#########################
+    
+    public function reprint_order_report(){  
+        # TITLE
+        $data['title']  = "REDSTRAW"; 
+        
+        # MODULE NAME
+        $data['module_name']  = "Reprint Order Report";   
+        
+        # MODEL
+        $this->load->model('get_report'); 
+        
+        # FORM CANCEL ORDER
+        $data['text_order_no'] = array(
+            'name' => 'text_order_no',
+            'id' => 'text_order_no',
+            'maxlength' => '20',
+            'size' => '20',                              
+            'style' => 'width:100%',
+            'class' => 'form-control'
+        ); 
+        
+        $data['button'] = array(
+            'name' => 'button_reprint',
+            'id' => 'button_reprint',
+            'value' => 'true',
+            'type' => 'reset',
+            'content' => 'Reprint',
+            'class' => 'form-control',
+        );
+
+        # VIEW
+        $this->load->view('view_reprint_order_report',$data);  
+    }
+    
+    function check_order_no(){
+        # MODEL
+        $this->load->model('get_report'); 
+        
+        $result_order_no_header = $this->get_report->check_order_no($this->input->post('post_order_no'));   
+        
+        if ($result_order_no_header->num_rows() > 0){
+           echo "1";
+        }
+        else{
+           echo "0";
+        } 
+    }
+    
+    function generate_purchase_order_pdf()
+    {   
+        # TITLE
+        $data['title']  = "REDSTRAW"; 
+        
+        # MODEL
+        $this->load->model('get_process_purchase_order');
+        
+        $order_no = $this->input->post('post_order_no');
+        
+        echo "window.open('".base_url()."process_purchase_order_pdf/index/".str_replace(',','-',$order_no)."');";                  
+    }  
+    
 }

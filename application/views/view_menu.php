@@ -98,8 +98,8 @@ $session_user_level = $this->session->userdata('userLevel');
                         ($session_group_code == 2)
                     ){
                     ?>
-                    <li><a href="<? echo site_url('process_add_stock/display_stock'); ?>" class="homeIcon" title="Home"><span>Add Stock</span></a></li>
-                    <li><a href="<? echo site_url('process_cancel_order/display_cancel'); ?>" class="homeIcon" title="Home"><span>Cancel Order</span></a></li>
+                    <li><a href="<? echo site_url('process_add_stock/display_stock'); ?>" class="homeIcon" title="Add Stock"><span>Add Stock</span></a></li>
+                    <li><a href="<? echo site_url('process_cancel_order/display_cancel'); ?>" class="homeIcon" title="Cancel Order"><span>Cancel Order</span></a></li>
                     <?php
                     }
                     ?>
@@ -117,7 +117,7 @@ $session_user_level = $this->session->userdata('userLevel');
                         ($session_group_code == 3)
                     ){
                     ?>
-                    <li><a href="<? echo site_url('process_purchase_order/display_order_form'); ?>" class="homeIcon" title="Home"><span>Purchase Order</span></a></li>
+                    <li><a href="<? echo site_url('process_purchase_order/display_order_form'); ?>" class="homeIcon" title="Purchase Order"><span>Purchase Order</span></a></li>
                     <?php
                     }
                     ?>
@@ -140,10 +140,11 @@ $session_user_level = $this->session->userdata('userLevel');
                         ($session_group_code == 2)
                     ){
                     ?>                  
-                    <li><a href="<? echo site_url('report/available_stocks_report'); ?>" class="homeIcon" title="Home"><span>Available Stocks</span></a></li> 
-                    <li><a href="<? echo site_url('report/summarized_report'); ?>" class="homeIcon" title="Home"><span>Summarized Report</span></a></li> 
-                    <li><a href="<? echo site_url('report/detailed_report'); ?>" class="homeIcon" title="Home"><span>Detailed Report</span></a></li> 
-                    <li><a href="<? echo site_url('report/cancelled_order_report'); ?>" class="homeIcon" title="Home"><span>Cancelled Order</span></a></li> 
+                    <li><a href="<? echo site_url('report/available_stocks_report'); ?>" class="homeIcon" title="Available Stocks"><span>Available Stocks</span></a></li> 
+                    <li><a href="<? echo site_url('report/summarized_report'); ?>" class="homeIcon" title="Summarized Report"><span>Summarized Report</span></a></li> 
+                    <li><a href="<? echo site_url('report/detailed_report'); ?>" class="homeIcon" title="Detailed Report"><span>Detailed Report</span></a></li> 
+                    <li><a href="<? echo site_url('report/cancelled_order_report'); ?>" class="homeIcon" title="Cancelled Order"><span>Cancelled Order</span></a></li> 
+                    <li><a href="<? echo site_url('report/reprint_order_report'); ?>" class="homeIcon" title="Reprint Order"><span>Reprint Order</span></a></li> 
                     <?php
                     }
                     ?>     

@@ -128,6 +128,7 @@
                             success: function(){
                                 bootbox.alert("Header successfully saved!", function() {  
                                     $('#create_header').modal('hide'); 
+                                    $('#saving_header').attr('disabled','disabled');
                                     createDetails(order_no_display);
                                 });  
                             }         
@@ -233,13 +234,15 @@
                             });
                         }
                         else
-                        {
+                        {              
+                            $('#saving_details').attr('disabled','disabled');
                            $.ajax({
                                 url: "<?php echo base_url('process_purchase_order/saving_details');?>",
                                 type: "POST",
                                 data: $('#purchase_detail_form').serialize(),
                                 success: function(){ 
                                     bootbox.alert("Details successfully saved!", function() {  
+                                        $('#saving_details').removeAttr('disabled'); 
                                         clearTextfield();
                                     });    
                                 }         

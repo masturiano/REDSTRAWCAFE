@@ -494,7 +494,7 @@ class Process_purchase_order extends CI_Controller {
                         data: "post_order_no="+post_purchase_order_no,
                         success: function(data){
                             eval(data);
-                            bootbox.alert("Print transmittal success!", function() {  
+                            bootbox.alert("Print order form success!", function() {  
                                 //$('#div_transmit_confirm').modal('hide'); 
                                 document.location.reload();
                             });       

@@ -757,7 +757,22 @@ class Get_report extends CI_Model {
                 {$filter_branch_group}
         ";
         return $query_execute = $this->db->query($query_select);
-    } 
+    }
+    
+    #########################( REPRINT ORDER NO )######################### 
+    
+    # CHECK ORDER NO DETAILS
+    function check_order_no($order_no){
+        $query_select = "
+            select 
+                * 
+            from 
+                tbl_purchase_order_header
+            where 
+                purchase_order_no = {$order_no}
+        ";
+        return $query_execute = $this->db->query($query_select);
+    }
     #########################( UNIVERSAL )#########################
     
     /**

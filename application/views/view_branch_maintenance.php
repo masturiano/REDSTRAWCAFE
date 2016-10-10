@@ -471,7 +471,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Add Item</h4>
+                <h4 class="modal-title" id="myModalLabel">Add Branch</h4>
               </div>
               <div class="modal-body">
               </div>
@@ -501,7 +501,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Edit Item</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Branch</h4>
               </div>
               <div class="modal-body">
               </div>
